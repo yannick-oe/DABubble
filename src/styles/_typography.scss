@@ -1,5 +1,39 @@
 @use 'variables' as v;
 
+// ─── Local Font-Face Declarations ────────────────────────────────────────────
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 // ─── Base ─────────────────────────────────────────────────────────────────────
 
 body {
@@ -11,6 +45,13 @@ body {
   letter-spacing: v.$letter-spacing-normal;
 }
 
+input,
+button,
+textarea,
+select {
+  font-family: inherit;
+}
+
 // ─── Headings ─────────────────────────────────────────────────────────────────
 
 h1,
@@ -19,13 +60,14 @@ h3,
 h4,
 h5,
 h6 {
+  font-family: v.$font-family-base;
   font-weight: v.$font-weight-bold;
   line-height: v.$line-height-tight;
   letter-spacing: v.$letter-spacing-tight;
   color: v.$color-text;
 }
 
-h1 { font-size: v.$font-size-3xl; font-weight: v.$font-weight-extrabold; }
+h1 { font-size: v.$font-size-3xl; }
 h2 { font-size: v.$font-size-2xl; }
 h3 { font-size: v.$font-size-xl; }
 h4 { font-size: v.$font-size-lg; }
@@ -66,7 +108,7 @@ a {
 .text-success   { color: v.$color-success; }
 .text-warning   { color: v.$color-warning; }
 
-// ─── Utility Classes — Size ───────────────────────────────────────────────────
+// ─── Utility Classes — Size (legacy aliases kept for compatibility) ───────────
 
 .text-2xs { font-size: v.$font-size-2xs; }
 .text-xs  { font-size: v.$font-size-xs; }
@@ -74,6 +116,66 @@ a {
 .text-md  { font-size: v.$font-size-md; }
 .text-lg  { font-size: v.$font-size-lg; }
 .text-xl  { font-size: v.$font-size-xl; }
+
+// ─── Utility Classes — Figma Scale ───────────────────────────────────────────
+// Sizes match the attached Figma screenshot exactly.
+// .text-display-46 is the only class that uses Nunito.
+
+.text-display-46 {
+  font-family: v.$font-family-display;
+  font-size: 2.556rem;   // 46px
+  line-height: 1.15;
+  font-weight: v.$font-weight-regular;
+}
+
+.text-38 {
+  font-family: v.$font-family-base;
+  font-size: 2.111rem;   // 38px
+  line-height: 1.2;
+  font-weight: v.$font-weight-regular;
+}
+
+.text-32 {
+  font-family: v.$font-family-base;
+  font-size: 1.778rem;   // 32px
+  line-height: 1.25;
+  font-weight: v.$font-weight-regular;
+}
+
+.text-26 {
+  font-family: v.$font-family-base;
+  font-size: 1.444rem;   // 26px
+  line-height: 1.3;
+  font-weight: v.$font-weight-regular;
+}
+
+.text-22 {
+  font-family: v.$font-family-base;
+  font-size: 1.222rem;   // 22px
+  line-height: 1.35;
+  font-weight: v.$font-weight-regular;
+}
+
+.text-18 {
+  font-family: v.$font-family-base;
+  font-size: 1rem;       // 18px
+  line-height: 1.5;
+  font-weight: v.$font-weight-regular;
+}
+
+.text-15 {
+  font-family: v.$font-family-base;
+  font-size: 0.833rem;   // 15px
+  line-height: 1.5;
+  font-weight: v.$font-weight-regular;
+}
+
+.text-12 {
+  font-family: v.$font-family-base;
+  font-size: 0.667rem;   // 12px
+  line-height: 1.5;
+  font-weight: v.$font-weight-regular;
+}
 
 // ─── Utility Classes — Weight ─────────────────────────────────────────────────
 

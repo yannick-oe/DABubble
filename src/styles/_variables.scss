@@ -112,16 +112,17 @@ $z-toast: 500;
 $z-tooltip: 600;
 
 // ─── Typography ──────────────────────────────────────────────────────────────
-$font-family-base: 'Nunito', sans-serif;
+$font-family-base: 'Inter', Arial, sans-serif;
+$font-family-display: 'Nunito', 'Inter', Arial, sans-serif;
 $font-size-2xs: 10px;
-$font-size-xs: 12px;
-$font-size-sm: 14px;
-$font-size-md: 16px;
-$font-size-lg: 18px;
-$font-size-xl: 20px;
-$font-size-2xl: 24px;
-$font-size-3xl: 32px;
-$font-size-4xl: 40px;
+$font-size-xs: 12px;       // Figma: 12px / 0.667rem
+$font-size-sm: 15px;       // Figma: 15px / 0.833rem
+$font-size-md: 18px;       // Figma: 18px / 1rem (body base)
+$font-size-lg: 22px;       // Figma: 22px / 1.222rem
+$font-size-xl: 26px;       // Figma: 26px / 1.444rem
+$font-size-2xl: 32px;      // Figma: 32px / 1.778rem
+$font-size-3xl: 38px;      // Figma: 38px / 2.111rem
+$font-size-4xl: 46px;      // Figma: 46px / 2.556rem (display, Nunito)
 $font-weight-regular: 400;
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
