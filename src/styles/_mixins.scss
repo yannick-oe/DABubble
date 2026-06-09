@@ -1,0 +1,69 @@
+@use 'variables' as v;
+
+// ─── Responsive Breakpoints ───────────────────────────────────────────────────
+
+@mixin respond-sm {
+  @media (max-width: #{v.$breakpoint-sm}) {
+    @content;
+  }
+}
+
+@mixin respond-md {
+  @media (max-width: #{v.$breakpoint-md}) {
+    @content;
+  }
+}
+
+@mixin respond-lg {
+  @media (max-width: #{v.$breakpoint-lg}) {
+    @content;
+  }
+}
+
+// ─── Flex Utilities ───────────────────────────────────────────────────────────
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// ─── Surface Card ─────────────────────────────────────────────────────────────
+
+@mixin card($radius: v.$radius-md, $shadow: v.$shadow-md) {
+  background-color: v.$color-surface;
+  border-radius: $radius;
+  box-shadow: $shadow;
+}
+
+// ─── Text Truncation ──────────────────────────────────────────────────────────
+
+@mixin text-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+// ─── Visually Hidden (Accessibility) ─────────────────────────────────────────
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}

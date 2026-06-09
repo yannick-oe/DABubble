@@ -1,0 +1,48 @@
+@use 'variables' as v;
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-1;
+}
+
+.form-label {
+  font-size: v.$font-size-sm;
+  font-weight: v.$font-weight-medium;
+  color: v.$color-text;
+}
+
+.form-input {
+  width: 100%;
+  padding: v.$space-3 v.$space-4;
+  border: 1.5px solid v.$color-border;
+  border-radius: v.$radius-xl;
+  font-size: v.$font-size-md;
+  color: v.$color-text;
+  background-color: v.$color-surface;
+  transition: border-color v.$transition-base, box-shadow v.$transition-base;
+
+  &::placeholder {
+    color: v.$color-text-muted;
+  }
+
+  &:focus {
+    border-color: v.$color-primary;
+    box-shadow: 0 0 0 3px rgba(v.$color-primary, 0.15);
+  }
+
+  &.is-invalid {
+    border-color: v.$color-error;
+  }
+}
+
+.form-error {
+  font-size: v.$font-size-xs;
+  color: v.$color-error;
+  min-height: 16px;
+}
+
+.form-hint {
+  font-size: v.$font-size-xs;
+  color: v.$color-text-muted;
+}

@@ -1,0 +1,42 @@
+@use 'variables' as v;
+
+body {
+  font-family: v.$font-family-base;
+  font-size: v.$font-size-md;
+  font-weight: v.$font-weight-regular;
+  line-height: v.$line-height-base;
+  color: v.$color-text;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: v.$font-weight-bold;
+  line-height: 1.25;
+}
+
+h1 { font-size: v.$font-size-3xl; }
+h2 { font-size: v.$font-size-2xl; }
+h3 { font-size: v.$font-size-xl; }
+h4 { font-size: v.$font-size-lg; }
+h5 { font-size: v.$font-size-md; }
+h6 { font-size: v.$font-size-sm; }
+
+p {
+  line-height: v.$line-height-base;
+}
+
+small {
+  font-size: v.$font-size-xs;
+}
+
+.text-muted {
+  color: v.$color-text-muted;
+}
+
+.text-primary {
+  color: v.$color-primary;
+}

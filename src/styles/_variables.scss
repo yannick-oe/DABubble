@@ -1,0 +1,77 @@
+// ─── Brand Colors ────────────────────────────────────────────────────────────
+$color-primary: #5c35e5;
+$color-primary-light: #7c5af0;
+$color-primary-dark: #4423c4;
+
+// ─── Background & Surface ────────────────────────────────────────────────────
+$color-bg: #eeeaf9;
+$color-surface: #ffffff;
+$color-surface-alt: #f6f4fc;
+
+// ─── Text ────────────────────────────────────────────────────────────────────
+$color-text: #1d1d2e;
+$color-text-muted: #686877;
+$color-text-on-primary: #ffffff;
+
+// ─── Borders ────────────────────────────────────────────────────────────────
+$color-border: #d8d4ea;
+
+// ─── Feedback ───────────────────────────────────────────────────────────────
+$color-success: #2dc653;
+$color-error: #e54935;
+$color-warning: #f0ad4e;
+$color-online: #2dc653;
+$color-offline: #92929e;
+
+// ─── Border Radius ───────────────────────────────────────────────────────────
+$radius-xs: 4px;
+$radius-sm: 8px;
+$radius-md: 16px;
+$radius-lg: 24px;
+$radius-xl: 32px;
+$radius-round: 50%;
+
+// ─── Spacing (4-point scale) ─────────────────────────────────────────────────
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-8: 32px;
+$space-10: 40px;
+$space-12: 48px;
+$space-16: 64px;
+
+// ─── Shadows ─────────────────────────────────────────────────────────────────
+$shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+$shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+
+// ─── Typography ──────────────────────────────────────────────────────────────
+$font-family-base: 'Nunito', sans-serif;
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-md: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 20px;
+$font-size-2xl: 24px;
+$font-size-3xl: 32px;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$line-height-base: 1.5;
+
+// ─── Layout ──────────────────────────────────────────────────────────────────
+$sidebar-width: 320px;
+$thread-panel-width: 400px;
+$topbar-height: 60px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// ─── Transitions ─────────────────────────────────────────────────────────────
+$transition-base: 200ms ease;
+$transition-slow: 350ms ease;

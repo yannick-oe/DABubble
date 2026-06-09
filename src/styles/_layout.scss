@@ -1,0 +1,32 @@
+@use 'variables' as v;
+
+html,
+body {
+  background-color: v.$color-bg;
+  overflow: hidden;
+}
+
+app-root {
+  display: flex;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.page-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  width: 100%;
+  padding: v.$space-4;
+}
+
+.auth-card {
+  background-color: v.$color-surface;
+  border-radius: v.$radius-lg;
+  box-shadow: v.$shadow-lg;
+  padding: v.$space-12 v.$space-10;
+  width: 100%;
+  max-width: 480px;
+}
