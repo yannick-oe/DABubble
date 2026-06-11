@@ -92,13 +92,13 @@ small {
 // ─── Links ───────────────────────────────────────────────────────────────────
 
 a {
-  color: v.color('primary');
-  font-weight: v.$font-weight-semibold;
+  color: v.color('primary-hover');
   transition: color v.$transition-fast;
 
   &:hover {
-    color: v.color('primary-hover');
-    text-decoration: underline;
+    color: v.color('primary');
+    font-weight: v.$font-weight-semibold;
+    
   }
 }
 

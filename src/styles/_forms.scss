@@ -24,6 +24,22 @@
   display: flex;
   align-items: center;
 
+  cursor: pointer;
+
+  &:hover {
+    .form-input:not(:focus):not(:disabled) {
+      border: 1px solid v.color('text-gray');
+    }
+  }
+
+  .form-input {
+    cursor: pointer;
+    
+    &:focus {
+      cursor: text;
+    }
+  }
+
   &--leading .form-input { padding-left: v.space('lg') + v.$icon-md + v.space('md'); }
 
   &--trailing .form-input {
@@ -87,7 +103,6 @@
 
   &:focus {
     border-color: v.color('primary');
-    box-shadow: v.$shadow-focus;
     outline: none;
   }
 
