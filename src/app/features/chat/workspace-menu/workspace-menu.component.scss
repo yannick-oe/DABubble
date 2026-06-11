@@ -15,13 +15,11 @@
   display: flex;
   align-items: center;
   gap: v.space('md');
-  padding-bottom: v.space('md');
-  border-bottom: 1px solid v.color('lines');
 }
 
 .workspace__head-logo {
-  width: v.$icon-lg;
-  height: v.$icon-lg;
+  width: v.$workspace-logo-size;
+  height: v.$workspace-logo-size;
 }
 
 .workspace__title {
@@ -34,6 +32,12 @@
 .workspace__section {
   display: flex;
   flex-direction: column;
+  gap: v.space('md');
+}
+
+.workspace__section-head {
+  display: flex;
+  align-items: center;
   gap: v.space('sm');
 }
 
@@ -41,6 +45,7 @@
   display: flex;
   align-items: center;
   gap: v.space('sm');
+  flex: 1;
   padding: v.space('xs');
   border: none;
   background: none;
@@ -56,8 +61,8 @@
 }
 
 .workspace__caret {
-  width: v.$icon-md;
-  height: v.$icon-md;
+  width: v.$icon-sm;
+  height: v.$icon-sm;
   transition: transform v.$transition-base;
 
   &--closed {
@@ -78,16 +83,16 @@
 .workspace__list {
   display: flex;
   flex-direction: column;
-  gap: v.space('xs');
-  padding-left: v.space('xl');
+  align-items: flex-start;
+  gap: v.space('md');
+  padding-left: v.space('xxl');
 }
 
 .workspace__item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: v.space('md');
-  width: 100%;
-  padding: v.space('xs') v.space('sm-md');
+  padding: v.space('xs') v.space('md');
   border: none;
   background: none;
   border-radius: v.$radius-pill;
@@ -95,14 +100,16 @@
   font-size: v.font-size('body');
   color: v.color('black');
   text-align: left;
-  transition: background-color v.$transition-fast;
+  transition: background-color v.$transition-fast, color v.$transition-fast;
 
   &:hover {
     background-color: v.color('bg');
   }
 
-  &--add {
-    color: v.color('text-gray');
+  &--active {
+    background-color: v.color('bg');
+    color: v.color('primary');
+    font-weight: v.$font-weight-semibold;
   }
 }
 
@@ -117,8 +124,8 @@
 }
 
 .workspace__avatar {
-  width: v.$avatar-md;
-  height: v.$avatar-md;
+  width: v.$avatar-list;
+  height: v.$avatar-list;
   border-radius: v.$radius-round;
   object-fit: cover;
 }

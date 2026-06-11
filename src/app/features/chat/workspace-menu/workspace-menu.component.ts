@@ -12,7 +12,8 @@ const GUEST_NAME = 'Gast';
 /**
  * Workspace navigation column showing the Devspace header, the channel list
  * and the direct-message user list. Lists hold dummy data until module 2;
- * the first direct-message entry is the live signed-in user.
+ * the first direct-message entry is the live signed-in user. Selecting an
+ * item only updates the visual active state — navigation follows in module 3.
  */
 @Component({
   selector: 'app-workspace-menu',
@@ -30,6 +31,8 @@ export class WorkspaceMenuComponent {
   protected readonly channelsOpen = signal(true);
 
   protected readonly directOpen = signal(true);
+
+  protected readonly selectedId = signal<string | null>(null);
 
   protected readonly selfName = computed(
     () => `${this.authService.currentUser()?.displayName ?? GUEST_NAME} (Du)`,
@@ -61,5 +64,23 @@ export class WorkspaceMenuComponent {
    */
   protected toggleDirect(): void {
     this.directOpen.update(open => !open);
+  }
+
+
+  /**
+   * Marks a list item as active. Navigation follows in module 3.
+   * @param id List-unique id of the clicked entry.
+   */
+  protected select(id: string): void {
+    this.selectedId.set(id);
+  }
+
+
+  /**
+   * Reports whether the given list entry is the active one.
+   * @param id List-unique id of the entry.
+   */
+  protected isSelected(id: string): boolean {
+    return this.selectedId() === id;
   }
 }

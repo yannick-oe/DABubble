@@ -8,36 +8,46 @@
   </header>
 
   <section class="workspace__section">
-    <button
-      class="workspace__section-toggle"
-      type="button"
-      aria-controls="workspace-channels"
-      [attr.aria-expanded]="channelsOpen()"
-      (click)="toggleChannels()"
-    >
-      <img
-        class="workspace__caret"
-        [class.workspace__caret--closed]="!channelsOpen()"
-        src="/icons/arrow-drop-down.svg"
-        alt=""
-        aria-hidden="true"
-      />
-      <img class="workspace__section-icon" src="/icons/workspaces.svg" alt="" aria-hidden="true" />
-      <span class="workspace__section-title">Channels</span>
-    </button>
+    <div class="workspace__section-head">
+      <button
+        class="workspace__section-toggle"
+        type="button"
+        aria-controls="workspace-channels"
+        [attr.aria-expanded]="channelsOpen()"
+        (click)="toggleChannels()"
+      >
+        <img
+          class="workspace__caret"
+          [class.workspace__caret--closed]="!channelsOpen()"
+          src="/icons/arrow-drop-down.svg"
+          alt=""
+          aria-hidden="true"
+        />
+        <img class="workspace__section-icon" src="/icons/workspaces.svg" alt="" aria-hidden="true" />
+        <span class="workspace__section-title">Channels</span>
+      </button>
+      <button class="btn btn-icon btn-sm" type="button" aria-label="Channel hinzufügen">
+        <img src="/icons/add.svg" alt="" aria-hidden="true" />
+      </button>
+    </div>
 
     @if (channelsOpen()) {
       <ul class="workspace__list" id="workspace-channels">
         @for (channel of channels; track channel.id) {
           <li>
-            <button class="workspace__item" type="button">
+            <button
+              class="workspace__item"
+              type="button"
+              [class.workspace__item--active]="isSelected('channel:' + channel.id)"
+              (click)="select('channel:' + channel.id)"
+            >
               <img class="workspace__item-icon" src="/icons/tag.svg" alt="" aria-hidden="true" />
               {{ channel.doc.name }}
             </button>
           </li>
         }
         <li>
-          <button class="workspace__item workspace__item--add" type="button">
+          <button class="workspace__item" type="button">
             <img class="workspace__item-icon" src="/icons/add-circle.svg" alt="" aria-hidden="true" />
             Channel hinzufügen
           </button>
@@ -47,33 +57,40 @@
   </section>
 
   <section class="workspace__section">
-    <button
-      class="workspace__section-toggle"
-      type="button"
-      aria-controls="workspace-direct"
-      [attr.aria-expanded]="directOpen()"
-      (click)="toggleDirect()"
-    >
-      <img
-        class="workspace__caret"
-        [class.workspace__caret--closed]="!directOpen()"
-        src="/icons/arrow-drop-down.svg"
-        alt=""
-        aria-hidden="true"
-      />
-      <img
-        class="workspace__section-icon"
-        src="/icons/account-circle.svg"
-        alt=""
-        aria-hidden="true"
-      />
-      <span class="workspace__section-title">Direktnachrichten</span>
-    </button>
+    <div class="workspace__section-head">
+      <button
+        class="workspace__section-toggle"
+        type="button"
+        aria-controls="workspace-direct"
+        [attr.aria-expanded]="directOpen()"
+        (click)="toggleDirect()"
+      >
+        <img
+          class="workspace__caret"
+          [class.workspace__caret--closed]="!directOpen()"
+          src="/icons/arrow-drop-down.svg"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="workspace__section-icon"
+          src="/icons/account-circle.svg"
+          alt=""
+          aria-hidden="true"
+        />
+        <span class="workspace__section-title">Direktnachrichten</span>
+      </button>
+    </div>
 
     @if (directOpen()) {
       <ul class="workspace__list" id="workspace-direct">
         <li>
-          <button class="workspace__item" type="button">
+          <button
+            class="workspace__item"
+            type="button"
+            [class.workspace__item--active]="isSelected('dm:self')"
+            (click)="select('dm:self')"
+          >
             <span class="workspace__avatar-wrap">
               <img class="workspace__avatar" [src]="selfAvatar()" alt="" aria-hidden="true" />
               <span class="workspace__status" aria-hidden="true"></span>
@@ -83,7 +100,12 @@
         </li>
         @for (user of users; track user.uid) {
           <li>
-            <button class="workspace__item" type="button">
+            <button
+              class="workspace__item"
+              type="button"
+              [class.workspace__item--active]="isSelected('dm:' + user.uid)"
+              (click)="select('dm:' + user.uid)"
+            >
               <span class="workspace__avatar-wrap">
                 <img class="workspace__avatar" [src]="'/' + user.avatarPath" alt="" aria-hidden="true" />
                 <span class="workspace__status" aria-hidden="true"></span>
