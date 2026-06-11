@@ -9,7 +9,13 @@
       "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('scripts:', Object.keys\\(p.scripts\\).join\\(', '\\)\\); console.log\\('puppeteer in deps:', JSON.stringify\\(p.devDependencies\\).includes\\('puppeteer'\\)\\)\")",
       "Bash(rm -rf .claude-tmp)",
       "Bash(npm uninstall *)",
-      "Bash(echo \"tsc exit: $?\")"
+      "Bash(echo \"tsc exit: $?\")",
+      "Bash(node .claude-tmp/module2-verify.mjs)",
+      "Bash(node .claude-tmp/debug-login.mjs)",
+      "Bash(node .claude-tmp/debug-dialog.mjs)",
+      "Bash(node .claude-tmp/debug-warning.mjs)",
+      "Bash(node .claude-tmp/debug-row.mjs)",
+      "Bash(node .claude-tmp/cleanup.mjs)"
     ]
   }
 }

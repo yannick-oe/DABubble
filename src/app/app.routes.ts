@@ -84,7 +84,7 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'direct/:userId',
+        path: 'dm/:uid',
         loadComponent: () =>
           import('./features/chat/direct-message-view/direct-message-view.component').then(
             m => m.DirectMessageViewComponent,

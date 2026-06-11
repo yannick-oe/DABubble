@@ -19,3 +19,12 @@ export interface ChannelDoc {
   /** Creation time; serverTimestamp() sentinel on write, Timestamp on read. */
   createdAt: Timestamp | FieldValue;
 }
+
+/**
+ * Channel document paired with its Firestore document id as read from the
+ * channels collection (collectionData idField).
+ */
+export interface Channel extends ChannelDoc {
+  /** Firestore document id of the channel. */
+  readonly id: string;
+}

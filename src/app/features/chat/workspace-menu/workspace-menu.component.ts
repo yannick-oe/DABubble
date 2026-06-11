@@ -1,22 +1,34 @@
 /**
- * @file Workspace column with channels and direct-message lists (dummy data).
+ * @file Workspace column with live channel and direct-message lists.
  */
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
+import { UserDoc } from '../../../models/user.model';
 import { AuthService } from '../../../services/auth.service';
+import { ChannelService } from '../../../services/channel.service';
 import { DEFAULT_AVATAR_PATH } from '../../../services/registration.service';
-import { DUMMY_CHANNELS, DUMMY_USERS } from '../dummy-data';
+import { UserService } from '../../../services/user.service';
+import { ChannelCreateDialogComponent } from '../channel-create-dialog/channel-create-dialog.component';
 
 const GUEST_NAME = 'Gast';
 
+/** Direct-message list entry of the signed-in user. */
+interface SelfEntry {
+  readonly uid: string;
+  readonly name: string;
+  readonly avatar: string;
+}
+
 /**
- * Workspace navigation column showing the Devspace header, the channel list
- * and the direct-message user list. Lists hold dummy data until module 2;
- * the first direct-message entry is the live signed-in user. Selecting an
- * item only updates the visual active state — navigation follows in module 3.
+ * Workspace navigation column showing the Devspace header, the live channel
+ * list and the direct-message user list. The signed-in user leads the
+ * direct-message list with a "(Du)" suffix, all other users follow
+ * alphabetically. Both add-channel triggers open the creation dialog.
  */
 @Component({
   selector: 'app-workspace-menu',
+  imports: [RouterLink, RouterLinkActive, ChannelCreateDialogComponent],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,31 +36,21 @@ const GUEST_NAME = 'Gast';
 export class WorkspaceMenuComponent {
   private readonly authService = inject(AuthService);
 
-  protected readonly channels = DUMMY_CHANNELS;
+  private readonly channelService = inject(ChannelService);
 
-  protected readonly users = DUMMY_USERS;
+  private readonly userService = inject(UserService);
+
+  protected readonly channels = this.channelService.channels;
 
   protected readonly channelsOpen = signal(true);
 
   protected readonly directOpen = signal(true);
 
-  protected readonly selectedId = signal<string | null>(null);
+  protected readonly dialogOpen = signal(false);
 
-  protected readonly selfName = computed(
-    () => `${this.authService.currentUser()?.displayName ?? GUEST_NAME} (Du)`,
-  );
+  protected readonly self = computed(() => this.buildSelfEntry());
 
-  protected readonly selfAvatar = computed(() => this.resolveSelfAvatar());
-
-
-  /**
-   * Resolves the signed-in user's avatar; external URLs fall back to the
-   * placeholder because the avatar system is local-path based.
-   */
-  private resolveSelfAvatar(): string {
-    const path = this.authService.currentUser()?.photoURL ?? DEFAULT_AVATAR_PATH;
-    return path.startsWith('http') ? `/${DEFAULT_AVATAR_PATH}` : `/${path}`;
-  }
+  protected readonly others = computed(() => this.sortOthers());
 
 
   /**
@@ -68,19 +70,53 @@ export class WorkspaceMenuComponent {
 
 
   /**
-   * Marks a list item as active. Navigation follows in module 3.
-   * @param id List-unique id of the clicked entry.
+   * Opens the channel-creation dialog.
    */
-  protected select(id: string): void {
-    this.selectedId.set(id);
+  protected openDialog(): void {
+    this.dialogOpen.set(true);
   }
 
 
   /**
-   * Reports whether the given list entry is the active one.
-   * @param id List-unique id of the entry.
+   * Closes the channel-creation dialog.
    */
-  protected isSelected(id: string): boolean {
-    return this.selectedId() === id;
+  protected closeDialog(): void {
+    this.dialogOpen.set(false);
+  }
+
+
+  /**
+   * Maps a user document's avatar path to an absolute asset URL; external
+   * URLs fall back to the placeholder because avatars are local-path based.
+   * @param path Avatar path stored on the user document.
+   */
+  protected avatarSrc(path: string): string {
+    return path.startsWith('http') ? `/${DEFAULT_AVATAR_PATH}` : `/${path}`;
+  }
+
+
+  /**
+   * Builds the signed-in user's list entry from the live user document,
+   * falling back to the auth profile while the document is still loading.
+   */
+  private buildSelfEntry(): SelfEntry | null {
+    const current = this.authService.currentUser();
+    if (!current) return null;
+    const document = this.userService.users().find(user => user.uid === current.uid);
+    const name = document?.name ?? current.displayName ?? GUEST_NAME;
+    const avatar = document?.avatarPath ?? current.photoURL ?? DEFAULT_AVATAR_PATH;
+    return { uid: current.uid, name: `${name} (Du)`, avatar: this.avatarSrc(avatar) };
+  }
+
+
+  /**
+   * Returns all users except the signed-in one, sorted alphabetically.
+   */
+  private sortOthers(): UserDoc[] {
+    const selfUid = this.authService.currentUser()?.uid;
+    return this.userService
+      .users()
+      .filter(user => user.uid !== selfUid)
+      .sort((a, b) => a.name.localeCompare(b.name, 'de'));
   }
 }

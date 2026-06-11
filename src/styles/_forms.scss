@@ -122,6 +122,11 @@
     cursor: not-allowed;
     opacity: 0.7;
   }
+
+  &--outlined {
+    background-color: v.color('white');
+    border-color: v.color('lines');
+  }
 }
 
 .form-textarea {
@@ -190,6 +195,36 @@
       position: absolute;
       inset: 2px;
       background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Cpath d='M1 5l3.5 3.5L11 1' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+    }
+  }
+
+  &:focus-visible { @include m.focus-ring; }
+}
+
+// ─── Radio ───────────────────────────────────────────────────────────────────
+
+.form-radio {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid v.color('lines');
+  border-radius: v.$radius-round;
+  background-color: v.color('white');
+  flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  position: relative;
+  transition: border-color v.$transition-base;
+
+  &:checked {
+    border-color: v.color('primary');
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: v.$radius-round;
+      background-color: v.color('primary');
     }
   }
 

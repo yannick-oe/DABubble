@@ -26,28 +26,27 @@
         <img class="workspace__section-icon" src="/icons/workspaces.svg" alt="" aria-hidden="true" />
         <span class="workspace__section-title">Channels</span>
       </button>
-      <button class="btn btn-icon btn-sm" type="button" aria-label="Channel hinzufügen">
+      <button class="btn btn-icon btn-sm" type="button" aria-label="Channel hinzufügen" (click)="openDialog()">
         <img src="/icons/add.svg" alt="" aria-hidden="true" />
       </button>
     </div>
 
     @if (channelsOpen()) {
       <ul class="workspace__list" id="workspace-channels">
-        @for (channel of channels; track channel.id) {
+        @for (channel of channels(); track channel.id) {
           <li>
-            <button
+            <a
               class="workspace__item"
-              type="button"
-              [class.workspace__item--active]="isSelected('channel:' + channel.id)"
-              (click)="select('channel:' + channel.id)"
+              [routerLink]="['/app/channel', channel.id]"
+              routerLinkActive="workspace__item--active"
             >
               <img class="workspace__item-icon" src="/icons/tag.svg" alt="" aria-hidden="true" />
-              {{ channel.doc.name }}
-            </button>
+              {{ channel.name }}
+            </a>
           </li>
         }
         <li>
-          <button class="workspace__item" type="button">
+          <button class="workspace__item" type="button" (click)="openDialog()">
             <img class="workspace__item-icon" src="/icons/add-circle.svg" alt="" aria-hidden="true" />
             Channel hinzufügen
           </button>
@@ -84,37 +83,41 @@
 
     @if (directOpen()) {
       <ul class="workspace__list" id="workspace-direct">
-        <li>
-          <button
-            class="workspace__item"
-            type="button"
-            [class.workspace__item--active]="isSelected('dm:self')"
-            (click)="select('dm:self')"
-          >
-            <span class="workspace__avatar-wrap">
-              <img class="workspace__avatar" [src]="selfAvatar()" alt="" aria-hidden="true" />
-              <span class="workspace__status" aria-hidden="true"></span>
-            </span>
-            {{ selfName() }}
-          </button>
-        </li>
-        @for (user of users; track user.uid) {
+        @if (self(); as selfEntry) {
           <li>
-            <button
+            <a
               class="workspace__item"
-              type="button"
-              [class.workspace__item--active]="isSelected('dm:' + user.uid)"
-              (click)="select('dm:' + user.uid)"
+              [routerLink]="['/app/dm', selfEntry.uid]"
+              routerLinkActive="workspace__item--active"
             >
               <span class="workspace__avatar-wrap">
-                <img class="workspace__avatar" [src]="'/' + user.avatarPath" alt="" aria-hidden="true" />
+                <img class="workspace__avatar" [src]="selfEntry.avatar" alt="" aria-hidden="true" />
                 <span class="workspace__status" aria-hidden="true"></span>
               </span>
+              {{ selfEntry.name }}
+            </a>
+          </li>
+        }
+        @for (user of others(); track user.uid) {
+          <li>
+            <a
+              class="workspace__item"
+              [routerLink]="['/app/dm', user.uid]"
+              routerLinkActive="workspace__item--active"
+            >
+              <span class="workspace__avatar-wrap">
+                <img class="workspace__avatar" [src]="avatarSrc(user.avatarPath)" alt="" aria-hidden="true" />
+                <span class="workspace__status workspace__status--offline" aria-hidden="true"></span>
+              </span>
               {{ user.name }}
-            </button>
+            </a>
           </li>
         }
       </ul>
     }
   </section>
 </nav>
+
+@if (dialogOpen()) {
+  <app-channel-create-dialog (closed)="closeDialog()" />
+}
