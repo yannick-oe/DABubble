@@ -19,7 +19,12 @@
       "Bash(node .claude-tmp/migrate-and-seed.mjs)",
       "Bash(node .claude-tmp/verify-duplicate.mjs)",
       "Bash(node .claude-tmp/purge-gast.mjs --delete)",
-      "Bash(node .claude-tmp/final-check.mjs)"
+      "Bash(node .claude-tmp/final-check.mjs)",
+      "Bash(node .claude-tmp/create-guest.mjs)",
+      "Bash(node .claude-tmp/verify-guest.mjs)",
+      "Bash(node .claude-tmp/repair-guest.mjs)",
+      "Bash(node .claude-tmp/verify-repair.mjs)",
+      "Bash(node .claude-tmp/check-tokens.mjs)"
     ]
   }
 }

@@ -10,7 +10,6 @@ import {
   confirmPasswordReset,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
-  signInAnonymously,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -33,6 +32,8 @@ import { UserDoc } from '../models/user.model';
 import { DEFAULT_AVATAR_PATH, RegistrationFormData } from './registration.service';
 
 const GUEST_NAME = 'Gast';
+const GUEST_EMAIL = 'gast@dabubble.dev';
+const GUEST_PASSWORD = 'DABubble-Gast-2026!';
 
 /**
  * Handles authentication against Firebase Auth and keeps the related
@@ -80,11 +81,32 @@ export class AuthService {
 
 
   /**
-   * Signs in anonymously as guest and creates the user document.
+   * Signs in to the fixed shared guest account and resets its profile so
+   * changes from a previous guest session do not leak into the next one.
+   * The credentials are deliberately client-visible (see CLAUDE.md tech
+   * debt): the account has no privileges beyond a normal user.
    */
   async signInAsGuest(): Promise<void> {
-    const credential = await signInAnonymously(this.auth);
-    await this.ensureUserDocument(credential.user);
+    const credential = await signInWithEmailAndPassword(this.auth, GUEST_EMAIL, GUEST_PASSWORD);
+    await this.resetGuestDocument(credential.user.uid);
+  }
+
+
+  /**
+   * Overwrites the guest user document with the default profile. The doc
+   * e-mail stays null so the technical account address is never shown.
+   * @param uid Uid of the fixed guest account.
+   */
+  private resetGuestDocument(uid: string): Promise<void> {
+    const reference = doc(this.firestore, `users/${uid}`);
+    const document: UserDoc = {
+      uid,
+      name: GUEST_NAME,
+      email: null,
+      avatarPath: DEFAULT_AVATAR_PATH,
+      createdAt: serverTimestamp(),
+    };
+    return setDoc(reference, document);
   }
 
 
