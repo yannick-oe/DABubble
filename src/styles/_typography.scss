@@ -93,12 +93,15 @@ small {
 
 a {
   color: v.color('primary-hover');
-  transition: color v.$transition-fast;
+  transition: all v.$transition-fast;
+  border: 1px solid transparent;
+  border-radius: v.$radius-pill;
+  padding: 4px 12px;
 
   &:hover {
     color: v.color('primary');
-    font-weight: v.$font-weight-semibold;
-    
+    font-weight: v.$font-weight-medium;
+    border: 1px solid v.color('lines');  
   }
 }
 

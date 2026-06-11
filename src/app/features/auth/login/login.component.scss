@@ -27,6 +27,11 @@
 
 .login-card__forgot {
   align-self: center;
+
+  &:hover {
+    border-color: transparent;
+    background-color: v.color('bg');
+  }
 }
 
 .login-card__divider {
