@@ -9,6 +9,10 @@
   flex-wrap: wrap;
   padding: v.space('xl-xxl') v.$header-inset;
 
+  @include m.respond-short {
+    padding: v.space('md') v.$header-inset;
+  }
+
   @include m.respond-md {
     padding: v.space('md');
   }

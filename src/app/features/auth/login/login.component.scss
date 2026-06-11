@@ -2,7 +2,7 @@
 @use 'mixins' as m;
 
 :host {
-  display: flex;
+  display: block;
   width: 100%;
 }
 
@@ -10,8 +10,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100dvh;
-  overflow-y: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
   background-color: v.color('bg');
 }
 
@@ -20,7 +20,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: v.space('md');
+  padding: 0 v.space('md');
 }
 
 .login-card {
@@ -28,6 +28,10 @@
   flex-direction: column;
   gap: v.space('xl-xxl');
   text-align: center;
+
+  @include m.respond-short {
+    gap: v.space('lg');
+  }
 }
 
 .login-card__title {
@@ -38,6 +42,10 @@
   display: flex;
   flex-direction: column;
   gap: v.space('xl-xxl');
+
+  @include m.respond-short {
+    gap: v.space('lg');
+  }
 }
 
 .login-card__forgot {

@@ -5,16 +5,12 @@
 
 html,
 body {
-  height: 100dvh;
   background-color: v.color('bg');
-  overflow: hidden;
 }
 
 app-root {
-  display: flex;
-  height: 100dvh;
+  display: block;
   width: 100%;
-  overflow: hidden;
 }
 
 // ─── App Shell (3-panel) ──────────────────────────────────────────────────────
@@ -85,6 +81,10 @@ app-root {
   padding: v.space('xxl') v.space('xl-xxl');
   width: 100%;
   max-width: v.$auth-card-width;
+
+  @include m.respond-short {
+    padding: v.space('xl') v.space('xl-xxl');
+  }
 
   @include m.respond-sm {
     padding: v.space('xl') v.space('lg');

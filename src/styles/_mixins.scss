@@ -22,6 +22,12 @@
   @media (max-width: #{v.$breakpoint-xl}) { @content; }
 }
 
+// ─── Responsive — max-height (short viewports) ───────────────────────────────
+
+@mixin respond-short {
+  @media (max-height: #{v.$breakpoint-short}) { @content; }
+}
+
 // ─── Responsive — min-width (desktop-first upward) ───────────────────────────
 
 @mixin from-md {
