@@ -11,6 +11,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./shared/auth-layout/auth-layout.component').then(m => m.AuthLayoutComponent),
     children: [
+      { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
       {
         path: 'auth',
         children: [
@@ -93,6 +94,5 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
   { path: '**', redirectTo: 'auth/login' },
 ];
