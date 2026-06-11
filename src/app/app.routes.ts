@@ -3,6 +3,7 @@
  */
 import { Routes } from '@angular/router';
 
+import { authGuard, unauthGuard } from './guards/auth.guard';
 import { registrationFormGuard } from './guards/registration-form.guard';
 
 export const routes: Routes = [
@@ -17,11 +18,13 @@ export const routes: Routes = [
         children: [
           {
             path: 'login',
+            canActivate: [unauthGuard],
             loadComponent: () =>
               import('./features/auth/login/login.component').then(m => m.LoginComponent),
           },
           {
             path: 'register',
+            canActivate: [unauthGuard],
             loadComponent: () =>
               import('./features/auth/register/register.component').then(m => m.RegisterComponent),
           },
@@ -35,6 +38,7 @@ export const routes: Routes = [
           },
           {
             path: 'forgot-password',
+            canActivate: [unauthGuard],
             loadComponent: () =>
               import('./features/auth/forgot-password/forgot-password.component').then(
                 m => m.ForgotPasswordComponent,
@@ -68,6 +72,7 @@ export const routes: Routes = [
   },
   {
     path: 'app',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./features/chat/app-shell/app-shell.component').then(m => m.AppShellComponent),
     children: [

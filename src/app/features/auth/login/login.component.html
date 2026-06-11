@@ -5,7 +5,7 @@
     Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.
   </p>
 
-  <form class="login-card__form">
+  <form class="login-card__form" [formGroup]="form" (ngSubmit)="submit()">
     <div class="form-field">
       <label class="sr-only" for="login-email">E-Mail-Adresse</label>
       <div class="form-input-wrapper form-input-wrapper--leading">
@@ -14,35 +14,55 @@
           id="login-email"
           class="form-input"
           type="email"
-          name="email"
+          formControlName="email"
           autocomplete="email"
           placeholder="beispielname&#64;email.com"
+          aria-describedby="login-email-error"
+          [attr.aria-invalid]="isInvalid('email')"
         />
       </div>
+      <p class="form-error" id="login-email-error">{{ errorMessage('email') }}</p>
     </div>
 
     <div class="form-field">
       <label class="sr-only" for="login-password">Passwort</label>
       <app-password-input
         inputId="login-password"
+        formControlName="password"
         placeholder="Passwort"
         autocomplete="current-password"
         leadingIcon="/icons/lock-grey.svg"
+        describedBy="login-password-error"
+        [invalid]="isInvalid('password')"
       />
+      <p class="form-error" id="login-password-error">{{ errorMessage('password') }}</p>
     </div>
 
     <a class="login-card__forgot" routerLink="/auth/forgot-password">Passwort vergessen?</a>
 
     <p class="login-card__divider">ODER</p>
 
-    <button class="btn login-card__google" type="button">
+    <button
+      class="btn login-card__google"
+      type="button"
+      [disabled]="pending()"
+      (click)="loginWithGoogle()"
+    >
       <img class="login-card__google-icon" src="/icons/google.svg" alt="" aria-hidden="true" />
       Anmelden mit Google
     </button>
 
+    @if (generalError()) {
+      <p class="form-error login-card__general" role="alert">{{ generalError() }}</p>
+    }
+
     <div class="login-card__actions">
-      <button class="btn btn-primary" type="submit">Anmelden</button>
-      <button class="btn btn-secondary" type="button">Gäste-Login</button>
+      <button class="btn btn-primary" type="submit" [disabled]="form.invalid || pending()">
+        Anmelden
+      </button>
+      <button class="btn btn-secondary" type="button" [disabled]="pending()" (click)="loginAsGuest()">
+        Gäste-Login
+      </button>
     </div>
   </form>
 </section>

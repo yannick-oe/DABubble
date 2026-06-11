@@ -18,7 +18,11 @@
 .login-card__form {
   display: flex;
   flex-direction: column;
-  gap: v.space-fluid('lg', 'xl-xxl');
+  gap: v.space-fluid('md', 'xl');
+}
+
+.login-card__general {
+  justify-content: center;
 }
 
 .login-card__forgot {
