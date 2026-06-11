@@ -24,7 +24,11 @@
   display: flex;
   align-items: center;
 
-  .form-input { padding-left: v.space('lg') + v.$icon-md + v.space('md'); }
+  &--leading .form-input { padding-left: v.space('lg') + v.$icon-md + v.space('md'); }
+
+  &--trailing .form-input {
+    padding-right: v.space('sm-md') + v.$btn-height-sm + v.space('xs');
+  }
 
   .form-input-icon {
     position: absolute;
@@ -40,12 +44,23 @@
     right: v.space('sm-md');
     display: flex;
     align-items: center;
-    background: none;
+    justify-content: center;
+    width: v.$btn-height-sm;
+    height: v.$btn-height-sm;
     border: none;
+    border-radius: v.$radius-round;
+    background: none;
     cursor: pointer;
-    color: v.color('text-gray');
-    padding: v.space('xs');
-    &:hover { color: v.color('black'); }
+    transition: background-color v.$transition-base;
+
+    &:hover { background-color: v.color('white'); }
+
+    &:focus-visible { @include m.focus-ring; }
+
+    img {
+      width: v.$icon-md;
+      height: v.$icon-md;
+    }
   }
 }
 

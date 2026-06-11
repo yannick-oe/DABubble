@@ -13,7 +13,7 @@
   <form class="register-card__form" [formGroup]="form" (ngSubmit)="continueToAvatar()">
     <div class="form-field">
       <label class="sr-only" for="register-name">Name und Nachname</label>
-      <div class="form-input-wrapper">
+      <div class="form-input-wrapper form-input-wrapper--leading">
         <img class="form-input-icon" src="/icons/account-circle.svg" alt="" aria-hidden="true" />
         <input
           id="register-name"
@@ -31,7 +31,7 @@
 
     <div class="form-field">
       <label class="sr-only" for="register-email">E-Mail-Adresse</label>
-      <div class="form-input-wrapper">
+      <div class="form-input-wrapper form-input-wrapper--leading">
         <img class="form-input-icon" src="/icons/mail-grey.svg" alt="" aria-hidden="true" />
         <input
           id="register-email"
@@ -49,19 +49,15 @@
 
     <div class="form-field">
       <label class="sr-only" for="register-password">Passwort</label>
-      <div class="form-input-wrapper">
-        <img class="form-input-icon" src="/icons/lock-grey.svg" alt="" aria-hidden="true" />
-        <input
-          id="register-password"
-          class="form-input"
-          type="password"
-          formControlName="password"
-          autocomplete="new-password"
-          placeholder="Passwort"
-          aria-describedby="register-password-error"
-          [attr.aria-invalid]="isInvalid('password')"
-        />
-      </div>
+      <app-password-input
+        inputId="register-password"
+        formControlName="password"
+        placeholder="Passwort"
+        autocomplete="new-password"
+        leadingIcon="/icons/lock-grey.svg"
+        describedBy="register-password-error"
+        [invalid]="isInvalid('password')"
+      />
       <p class="form-error" id="register-password-error">{{ errorMessage('password') }}</p>
     </div>
 

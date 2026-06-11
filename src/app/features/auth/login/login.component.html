@@ -8,7 +8,7 @@
   <form class="login-card__form">
     <div class="form-field">
       <label class="sr-only" for="login-email">E-Mail-Adresse</label>
-      <div class="form-input-wrapper">
+      <div class="form-input-wrapper form-input-wrapper--leading">
         <img class="form-input-icon" src="/icons/mail-grey.svg" alt="" aria-hidden="true" />
         <input
           id="login-email"
@@ -23,17 +23,12 @@
 
     <div class="form-field">
       <label class="sr-only" for="login-password">Passwort</label>
-      <div class="form-input-wrapper">
-        <img class="form-input-icon" src="/icons/lock-grey.svg" alt="" aria-hidden="true" />
-        <input
-          id="login-password"
-          class="form-input"
-          type="password"
-          name="password"
-          autocomplete="current-password"
-          placeholder="Passwort"
-        />
-      </div>
+      <app-password-input
+        inputId="login-password"
+        placeholder="Passwort"
+        autocomplete="current-password"
+        leadingIcon="/icons/lock-grey.svg"
+      />
     </div>
 
     <a class="login-card__forgot" routerLink="/auth/forgot-password">Passwort vergessen?</a>

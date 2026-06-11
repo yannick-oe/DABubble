@@ -4,6 +4,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { PasswordInputComponent } from '../../../shared/password-input/password-input.component';
 import { IntroComponent } from '../intro/intro.component';
 
 /**
@@ -12,7 +13,7 @@ import { IntroComponent } from '../intro/intro.component';
  */
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, IntroComponent],
+  imports: [RouterLink, IntroComponent, PasswordInputComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

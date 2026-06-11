@@ -24,6 +24,7 @@ import { FirebaseError } from 'firebase/app';
 
 import { AuthService } from '../../../services/auth.service';
 import { ToastService } from '../../../services/toast.service';
+import { PasswordInputComponent } from '../../../shared/password-input/password-input.component';
 
 const PASSWORD_MIN_LENGTH = 6;
 const TOAST_MESSAGE = 'Anmelden';
@@ -54,7 +55,7 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
  */
 @Component({
   selector: 'app-reset-password',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, PasswordInputComponent],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

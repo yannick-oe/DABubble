@@ -18,6 +18,7 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
+import { PasswordInputComponent } from '../../../shared/password-input/password-input.component';
 import { RegistrationService } from '../../../services/registration.service';
 
 const NAME_MIN_LENGTH = 2;
@@ -58,7 +59,7 @@ function rejectedValueValidator(rejectedValue: string, message: string): Validat
  */
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, PasswordInputComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
