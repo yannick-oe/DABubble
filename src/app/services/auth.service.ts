@@ -18,7 +18,16 @@ import {
   user,
   verifyPasswordResetCode,
 } from '@angular/fire/auth';
-import { Firestore, doc, getDoc, serverTimestamp, setDoc } from '@angular/fire/firestore';
+import {
+  DocumentReference,
+  DocumentSnapshot,
+  Firestore,
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from '@angular/fire/firestore';
 
 import { UserDoc } from '../models/user.model';
 import { DEFAULT_AVATAR_PATH, RegistrationFormData } from './registration.service';
@@ -141,19 +150,40 @@ export class AuthService {
 
 
   /**
-   * Creates the user document for popup or guest sign-ins if it is missing.
+   * Creates the user document for popup or guest sign-ins if it is missing,
+   * otherwise repairs legacy documents with external avatar URLs.
    * @param firebaseUser Authenticated Firebase user.
    */
   private async ensureUserDocument(firebaseUser: User): Promise<void> {
     const reference = doc(this.firestore, `users/${firebaseUser.uid}`);
     const snapshot = await getDoc(reference);
-    if (snapshot.exists()) return;
-    await setDoc(reference, this.buildUserDoc(firebaseUser));
+    if (!snapshot.exists()) {
+      await setDoc(reference, this.buildUserDoc(firebaseUser));
+      return;
+    }
+    await this.normalizeAvatarPath(reference, snapshot);
   }
 
 
   /**
-   * Maps a Firebase user to the Firestore document shape.
+   * One-time repair: replaces an external avatar URL in a loaded user
+   * document with the local placeholder path.
+   * @param reference Document reference of the loaded user.
+   * @param snapshot Loaded document snapshot.
+   */
+  private async normalizeAvatarPath(
+    reference: DocumentReference,
+    snapshot: DocumentSnapshot,
+  ): Promise<void> {
+    const avatarPath = (snapshot.data() as UserDoc | undefined)?.avatarPath ?? '';
+    if (!avatarPath.startsWith('http')) return;
+    await updateDoc(reference, { avatarPath: DEFAULT_AVATAR_PATH });
+  }
+
+
+  /**
+   * Maps a Firebase user to the Firestore document shape. The avatar is
+   * always the local placeholder; external photo URLs are ignored.
    * @param firebaseUser Authenticated Firebase user.
    */
   private buildUserDoc(firebaseUser: User): UserDoc {
@@ -161,7 +191,7 @@ export class AuthService {
       uid: firebaseUser.uid,
       name: firebaseUser.displayName ?? GUEST_NAME,
       email: firebaseUser.email ?? '',
-      avatarPath: firebaseUser.photoURL ?? DEFAULT_AVATAR_PATH,
+      avatarPath: DEFAULT_AVATAR_PATH,
       createdAt: serverTimestamp(),
     };
   }

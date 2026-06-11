@@ -31,14 +31,28 @@ export class AppShellComponent {
 
   protected readonly avatarSrc = computed(() => this.resolveAvatar());
 
+  protected readonly avatarAlt = computed(() => `Avatar von ${this.userName()}`);
+
 
   /**
-   * Resolves the avatar image source from the auth profile. Registered users
-   * store a public asset path, Google accounts an absolute URL.
+   * Resolves the avatar image source from the auth profile. The avatar
+   * system is local-path based: external URLs (e.g. Google profile photos)
+   * are replaced by the placeholder.
    */
   private resolveAvatar(): string {
     const path = this.authService.currentUser()?.photoURL ?? DEFAULT_AVATAR_PATH;
-    return path.startsWith('http') ? path : `/${path}`;
+    return path.startsWith('http') ? `/${DEFAULT_AVATAR_PATH}` : `/${path}`;
+  }
+
+
+  /**
+   * Swaps the avatar to the placeholder when the image fails to load.
+   * @param event Error event of the avatar image element.
+   */
+  protected useAvatarFallback(event: Event): void {
+    const image = event.target as HTMLImageElement;
+    if (image.src.endsWith(DEFAULT_AVATAR_PATH)) return;
+    image.src = `/${DEFAULT_AVATAR_PATH}`;
   }
 
 

@@ -11,6 +11,7 @@ export interface UserDoc {
   uid: string;
   name: string;
   email: string;
+  /** Local public asset path (e.g. avatars/profile.png) — never an external URL. */
   avatarPath: string;
   createdAt: Timestamp | FieldValue;
 }

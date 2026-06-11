@@ -1,6 +1,11 @@
 <div class="page-center">
   <section class="auth-card app-placeholder">
-    <img class="app-placeholder__avatar" [src]="avatarSrc()" alt="Dein Avatar" />
+    <img
+      class="app-placeholder__avatar"
+      [src]="avatarSrc()"
+      [alt]="avatarAlt()"
+      (error)="useAvatarFallback($event)"
+    />
     <h1 class="app-placeholder__title">Angemeldet als {{ userName() }}</h1>
     <button class="btn btn-primary" type="button" (click)="logout()">Log out</button>
   </section>
