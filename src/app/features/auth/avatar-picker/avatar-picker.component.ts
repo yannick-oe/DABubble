@@ -16,8 +16,10 @@ import { FirebaseError } from 'firebase/app';
 
 import { AuthService } from '../../../services/auth.service';
 import { RegistrationService } from '../../../services/registration.service';
+import { ToastService } from '../../../services/toast.service';
 
 const SUCCESS_REDIRECT_DELAY_MS = 1500;
+const SUCCESS_TOAST_MESSAGE = 'Konto erfolgreich erstellt!';
 
 const EMAIL_IN_USE_MESSAGE = 'Diese E-Mail-Adresse wird bereits verwendet';
 const WEAK_PASSWORD_MESSAGE = 'Dein Passwort muss mindestens 6 Zeichen lang sein';
@@ -54,6 +56,8 @@ export class AvatarPickerComponent implements AfterViewInit {
   private readonly registration = inject(RegistrationService);
 
   private readonly router = inject(Router);
+
+  private readonly toast = inject(ToastService);
 
   private readonly title = viewChild<ElementRef<HTMLHeadingElement>>('title');
 
@@ -116,11 +120,12 @@ export class AvatarPickerComponent implements AfterViewInit {
 
 
   /**
-   * Shows the success confirmation, then routes to the login page.
+   * Shows the success toast, then routes to the login page.
    * TODO: redirect to the main app instead once it exists.
    */
   private finishSuccessfully(): void {
     this.success.set(true);
+    this.toast.show(SUCCESS_TOAST_MESSAGE);
     setTimeout(() => {
       this.registration.reset();
       this.router.navigate(['/auth/login']);

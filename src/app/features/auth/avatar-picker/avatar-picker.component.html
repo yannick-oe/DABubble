@@ -1,6 +1,6 @@
 <section class="auth-card avatar-card">
   <header class="auth-card__head auth-card__head--start">
-    <button class="btn btn-icon" type="button" aria-label="Zurück zum Formular" (click)="goBack()">
+    <button class="btn btn-icon" type="button" aria-label="Zurück" (click)="goBack()">
       <img src="/icons/arrow-left.svg" alt="" aria-hidden="true" />
     </button>
     <h1 #title class="avatar-card__title" tabindex="-1">Wähle deinen Avatar</h1>
@@ -43,8 +43,4 @@
       Weiter
     </button>
   </div>
-
-  @if (success()) {
-    <p class="avatar-card__toast" role="status">Konto erfolgreich erstellt!</p>
-  }
 </section>

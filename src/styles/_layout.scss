@@ -86,26 +86,38 @@ app-root {
     padding: v.space('xl') v.space('lg');
     border-radius: v.$radius-md;
   }
+
+  &--wide {
+    max-width: v.$auth-card-width-wide;
+  }
 }
 
 .auth-card__head {
-  position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: v.$btn-height minmax(0, 1fr) v.$btn-height;
   align-items: center;
-  justify-content: center;
-  text-align: center;
 
   > .btn-icon {
-    position: absolute;
-    left: 0;
+    grid-column: 1;
+  }
+
+  > h1 {
+    grid-column: 2;
+    text-align: center;
+    overflow-wrap: break-word;
+    hyphens: auto;
+
+    @include m.respond-sm {
+      font-size: v.font-size('h3');
+    }
   }
 
   &--start {
-    justify-content: flex-start;
+    display: flex;
+    align-items: center;
     gap: v.space('md');
-    text-align: left;
 
-    > .btn-icon { position: static; }
+    > h1 { text-align: left; }
   }
 }
 

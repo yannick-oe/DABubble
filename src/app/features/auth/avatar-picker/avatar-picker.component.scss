@@ -86,17 +86,3 @@
     text-align: left;
   }
 }
-
-.avatar-card__toast {
-  position: fixed;
-  bottom: v.space('xl');
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: v.$z-toast;
-  padding: v.space('sm-md') v.space('lg');
-  border-radius: v.$radius-pill;
-  background-color: v.color('primary');
-  color: v.color('white');
-  font-weight: v.$font-weight-semibold;
-  box-shadow: v.$shadow-lg;
-}

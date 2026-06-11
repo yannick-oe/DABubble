@@ -2,7 +2,14 @@
  * @file Authentication service wrapping Firebase Auth and the user document.
  */
 import { Injectable, inject, signal } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, updateProfile } from '@angular/fire/auth';
+import {
+  Auth,
+  confirmPasswordReset,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  updateProfile,
+  verifyPasswordResetCode,
+} from '@angular/fire/auth';
 import { Firestore, doc, serverTimestamp, setDoc } from '@angular/fire/firestore';
 
 import { UserDoc } from '../models/user.model';
@@ -71,8 +78,32 @@ export class AuthService {
   }
 
 
-  /** Placeholder — will send password-reset email. */
-  sendPasswordReset(_email: string): Promise<void> {
-    return Promise.resolve();
+  /**
+   * Sends the password-reset e-mail with a continue link back to this app.
+   * @param email Address entered on the forgot-password screen.
+   */
+  sendPasswordReset(email: string): Promise<void> {
+    const settings = { url: `${window.location.origin}/auth/reset-password` };
+    return sendPasswordResetEmail(this.auth, email, settings);
+  }
+
+
+  /**
+   * Verifies a password-reset action code from the e-mail link.
+   * @param code Firebase oobCode query parameter.
+   * @returns The e-mail address belonging to the code.
+   */
+  verifyResetCode(code: string): Promise<string> {
+    return verifyPasswordResetCode(this.auth, code);
+  }
+
+
+  /**
+   * Sets the new password for a verified reset code.
+   * @param code Firebase oobCode query parameter.
+   * @param newPassword Password chosen on the reset screen.
+   */
+  completePasswordReset(code: string, newPassword: string): Promise<void> {
+    return confirmPasswordReset(this.auth, code, newPassword);
   }
 }
