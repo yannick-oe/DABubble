@@ -7,41 +7,61 @@ import { registrationFormGuard } from './guards/registration-form.guard';
 
 export const routes: Routes = [
   {
-    path: 'auth',
+    path: '',
     loadComponent: () =>
       import('./shared/auth-layout/auth-layout.component').then(m => m.AuthLayoutComponent),
     children: [
       {
-        path: 'login',
-        loadComponent: () =>
-          import('./features/auth/login/login.component').then(m => m.LoginComponent),
+        path: 'auth',
+        children: [
+          {
+            path: 'login',
+            loadComponent: () =>
+              import('./features/auth/login/login.component').then(m => m.LoginComponent),
+          },
+          {
+            path: 'register',
+            loadComponent: () =>
+              import('./features/auth/register/register.component').then(m => m.RegisterComponent),
+          },
+          {
+            path: 'register/avatar',
+            canActivate: [registrationFormGuard],
+            loadComponent: () =>
+              import('./features/auth/avatar-picker/avatar-picker.component').then(
+                m => m.AvatarPickerComponent,
+              ),
+          },
+          {
+            path: 'forgot-password',
+            loadComponent: () =>
+              import('./features/auth/forgot-password/forgot-password.component').then(
+                m => m.ForgotPasswordComponent,
+              ),
+          },
+          {
+            path: 'reset-password',
+            loadComponent: () =>
+              import('./features/auth/reset-password/reset-password.component').then(
+                m => m.ResetPasswordComponent,
+              ),
+          },
+        ],
       },
       {
-        path: 'register',
-        loadComponent: () =>
-          import('./features/auth/register/register.component').then(m => m.RegisterComponent),
-      },
-      {
-        path: 'register/avatar',
-        canActivate: [registrationFormGuard],
-        loadComponent: () =>
-          import('./features/auth/avatar-picker/avatar-picker.component').then(
-            m => m.AvatarPickerComponent,
-          ),
-      },
-      {
-        path: 'forgot-password',
-        loadComponent: () =>
-          import('./features/auth/forgot-password/forgot-password.component').then(
-            m => m.ForgotPasswordComponent,
-          ),
-      },
-      {
-        path: 'reset-password',
-        loadComponent: () =>
-          import('./features/auth/reset-password/reset-password.component').then(
-            m => m.ResetPasswordComponent,
-          ),
+        path: 'legal',
+        children: [
+          {
+            path: 'imprint',
+            loadComponent: () =>
+              import('./features/legal/imprint/imprint.component').then(m => m.ImprintComponent),
+          },
+          {
+            path: 'privacy',
+            loadComponent: () =>
+              import('./features/legal/privacy/privacy.component').then(m => m.PrivacyComponent),
+          },
+        ],
       },
     ],
   },
@@ -70,21 +90,6 @@ export const routes: Routes = [
           import('./features/chat/new-message/new-message.component').then(
             m => m.NewMessageComponent,
           ),
-      },
-    ],
-  },
-  {
-    path: 'legal',
-    children: [
-      {
-        path: 'imprint',
-        loadComponent: () =>
-          import('./features/legal/imprint/imprint.component').then(m => m.ImprintComponent),
-      },
-      {
-        path: 'privacy',
-        loadComponent: () =>
-          import('./features/legal/privacy/privacy.component').then(m => m.PrivacyComponent),
       },
     ],
   },
