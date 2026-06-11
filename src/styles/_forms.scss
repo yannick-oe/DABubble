@@ -24,11 +24,11 @@
   display: flex;
   align-items: center;
 
-  .form-input { padding-left: v.space('xl-xxl'); }
+  .form-input { padding-left: v.space('lg') + v.$icon-md + v.space('md'); }
 
   .form-input-icon {
     position: absolute;
-    left: v.space('md');
+    left: v.space('lg');
     width: v.$icon-md;
     height: v.$icon-md;
     pointer-events: none;

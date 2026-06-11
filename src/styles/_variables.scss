@@ -3,19 +3,23 @@
 // ─── Colors ──────────────────────────────────────────────────────────────────
 // Canonical Figma palette (design-system.md §1). Single source of truth.
 $colors: (
-  white:          #ffffff,
-  bg:             #eceefe,
-  lines:          #adb0d9,
-  black:          #000000,
-  text-gray:      #686868,
-  primary:        #444df2,
-  primary-hover:  #797ef3,
-  primary-active: #535af1,
-  online:         #92c83e,
-  error:          #ed1e79,
+  'white':          #ffffff,
+  'bg':             #eceefe,
+  'lines':          #adb0d9,
+  'black':          #000000,
+  'text-gray':      #686868,
+  'primary':        #444df2,
+  'primary-hover':  #797ef3,
+  'primary-active': #535af1,
+  'online':         #92c83e,
+  'error':          #ed1e79,
 );
 
 @function color($key) {
+  @if not map.has-key($colors, $key) {
+    @error 'Unknown color token: #{$key}';
+  }
+
   @return map.get($colors, $key);
 }
 
@@ -33,6 +37,10 @@ $font-sizes: (
 );
 
 @function font-size($key) {
+  @if not map.has-key($font-sizes, $key) {
+    @error 'Unknown font-size token: #{$key}';
+  }
+
   @return map.get($font-sizes, $key);
 }
 
@@ -76,11 +84,15 @@ $space: (
 );
 
 @function space($key) {
+  @if not map.has-key($space, $key) {
+    @error 'Unknown space token: #{$key}';
+  }
+
   @return map.get($space, $key);
 }
 
 // ─── Component Sizes ─────────────────────────────────────────────────────────
-$input-height: 48px;
+$input-height: 60px;
 $input-height-sm: 40px;
 $btn-height: 48px;
 $btn-height-sm: 40px;
@@ -118,8 +130,10 @@ $z-tooltip: 600;
 $sidebar-width: 320px;
 $thread-panel-width: 400px;
 $topbar-height: 60px;
-$auth-card-width: 480px;
+$auth-card-width: 600px;
 $content-max-width: 800px;
+$header-inset: 75px;
+$header-logo-size: 56px;
 
 // ─── Responsive Breakpoints ───────────────────────────────────────────────────
 $breakpoint-xs: 320px;

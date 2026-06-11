@@ -1,0 +1,62 @@
+<div class="auth-page">
+  <app-header />
+
+  <main class="auth-page__main">
+    <section class="auth-card login-card">
+      <h1 class="login-card__title">Anmeldung</h1>
+
+      <p class="login-card__intro">
+        Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.
+      </p>
+
+      <form class="login-card__form">
+        <div class="form-field">
+          <label class="sr-only" for="login-email">E-Mail-Adresse</label>
+          <div class="form-input-wrapper">
+            <img class="form-input-icon" src="/icons/mail-grey.svg" alt="" aria-hidden="true" />
+            <input
+              id="login-email"
+              class="form-input"
+              type="email"
+              name="email"
+              autocomplete="email"
+              placeholder="beispielname&#64;email.com"
+            />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="sr-only" for="login-password">Passwort</label>
+          <div class="form-input-wrapper">
+            <img class="form-input-icon" src="/icons/lock-grey.svg" alt="" aria-hidden="true" />
+            <input
+              id="login-password"
+              class="form-input"
+              type="password"
+              name="password"
+              autocomplete="current-password"
+              placeholder="Passwort"
+            />
+          </div>
+        </div>
+
+        <a class="login-card__forgot" routerLink="/auth/reset-password">Passwort vergessen?</a>
+
+        <p class="login-card__divider">ODER</p>
+
+        <button class="btn login-card__google" type="button">
+          <img class="login-card__google-icon" src="/icons/google.svg" alt="" aria-hidden="true" />
+          Anmelden mit Google
+        </button>
+
+        <div class="login-card__actions">
+          <button class="btn btn-primary" type="submit" disabled>Anmelden</button>
+          <button class="btn btn-secondary" type="button">Gäste-Login</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <app-footer />
+  <app-intro />
+</div>

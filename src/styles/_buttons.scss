@@ -31,7 +31,6 @@
 
   &:disabled,
   &[aria-disabled='true'] {
-    opacity: 0.45;
     cursor: not-allowed;
     pointer-events: none;
   }
@@ -52,6 +51,11 @@
   &:hover   { background-color: v.color('primary-hover'); }
   &:active  { background-color: v.color('primary-active'); }
   &:focus-visible { @include m.focus-ring(v.color('primary')); }
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    background-color: v.color('text-gray');
+  }
 }
 
 // ─── Secondary ───────────────────────────────────────────────────────────────
@@ -62,12 +66,24 @@
   border: 1.5px solid v.color('primary');
 
   &:hover  {
-    background-color: rgba(v.color('primary'), 0.1);
-    border-color: v.color('primary-hover');
+    background-color: v.color('primary-active');
+    border-color: v.color('primary-active');
+    color: v.color('white');
   }
 
-  &:active { background-color: rgba(v.color('primary'), 0.08); }
+  &:active {
+    background-color: v.color('primary');
+    border-color: v.color('primary');
+    color: v.color('white');
+  }
+
   &:focus-visible { @include m.focus-ring(v.color('primary')); }
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    color: v.color('text-gray');
+    border-color: v.color('text-gray');
+  }
 }
 
 // ─── Icon Button ─────────────────────────────────────────────────────────────

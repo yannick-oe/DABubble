@@ -1,0 +1,48 @@
+@use 'variables' as v;
+@use 'mixins' as m;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: v.space('md');
+  flex-wrap: wrap;
+  padding: v.space('xl-xxl') v.$header-inset;
+
+  @include m.respond-md {
+    padding: v.space('md');
+  }
+}
+
+.header__brand {
+  display: flex;
+  align-items: center;
+  gap: v.space('md');
+}
+
+.header__logo {
+  width: v.$header-logo-size;
+  height: v.$header-logo-size;
+}
+
+.header__wordmark {
+  font-family: v.$font-heading;
+  font-size: v.font-size('h3');
+  font-weight: v.$font-weight-bold;
+  color: v.color('black');
+}
+
+.header__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: v.space('xs');
+}
+
+.header__cta-text {
+  color: v.color('black');
+}
+
+.header__cta-link {
+  font-size: v.font-size('body');
+}

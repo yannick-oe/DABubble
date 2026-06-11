@@ -1,0 +1,26 @@
+@use 'variables' as v;
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: v.$z-overlay;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, v.color('primary-hover'), v.color('primary'));
+}
+
+.intro__logo {
+  will-change: transform;
+  transform: translate(0, 0) scale(1);
+}
+
+.intro--moving {
+  opacity: 0;
+  transition: opacity var(--intro-fade-ms) ease-out var(--intro-fade-delay-ms);
+
+  .intro__logo {
+    transform: translate(var(--intro-dx), var(--intro-dy)) scale(var(--intro-scale));
+    transition: transform var(--intro-move-ms) ease-out;
+  }
+}

@@ -1,0 +1,12 @@
+@use 'variables' as v;
+
+.footer {
+  display: flex;
+  justify-content: center;
+  padding: v.space('lg');
+}
+
+.footer__nav {
+  display: flex;
+  gap: v.space('xl');
+}
