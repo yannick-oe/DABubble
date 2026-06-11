@@ -24,7 +24,8 @@
       "Bash(node .claude-tmp/verify-guest.mjs)",
       "Bash(node .claude-tmp/repair-guest.mjs)",
       "Bash(node .claude-tmp/verify-repair.mjs)",
-      "Bash(node .claude-tmp/check-tokens.mjs)"
+      "Bash(node .claude-tmp/check-tokens.mjs)",
+      "Bash(node .claude-tmp/delete-channel.mjs)"
     ]
   }
 }
