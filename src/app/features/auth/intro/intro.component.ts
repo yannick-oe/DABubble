@@ -14,6 +14,8 @@ import {
 
 const INTRO_PLAYED_KEY = 'dabubbleIntroPlayed';
 const HOLD_DURATION_MS = 800;
+const STEP_DURATION_MS = 500;
+const TEXT_SLIDE_DURATION_MS = 1200;
 const MOVE_DURATION_MS = 700;
 const FADE_DELAY_MS = 200;
 const FADE_DURATION_MS = 500;
@@ -34,12 +36,13 @@ export class IntroComponent implements OnInit {
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  private readonly logo = viewChild<ElementRef<HTMLImageElement>>('logo');
+  private readonly logo = viewChild<ElementRef<HTMLDivElement>>('logo');
 
   protected readonly visible = signal(false);
 
   protected readonly moving = signal(false);
 
+  protected readonly step = signal(0);
 
   /**
    * Starts the splash sequence unless it already played this session or the
@@ -48,9 +51,15 @@ export class IntroComponent implements OnInit {
   ngOnInit(): void {
     if (this.shouldSkip()) return;
     this.visible.set(true);
-    setTimeout(() => this.startHandoff(), HOLD_DURATION_MS);
+    
+    setTimeout(() => {
+      this.step.set(1);
+      setTimeout(() => {
+        this.step.set(2);
+        setTimeout(() => this.startHandoff(), TEXT_SLIDE_DURATION_MS);
+      }, STEP_DURATION_MS);
+    }, HOLD_DURATION_MS);
   }
-
 
   /**
    * Determines whether the splash must be skipped entirely.
@@ -60,7 +69,6 @@ export class IntroComponent implements OnInit {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     return reducedMotion || sessionStorage.getItem(INTRO_PLAYED_KEY) === 'true';
   }
-
 
   /**
    * Computes the header target transform and triggers the handoff motion.
@@ -72,7 +80,6 @@ export class IntroComponent implements OnInit {
     setTimeout(() => this.finish(), totalMs);
   }
 
-
   /**
    * Measures the splash logo and the header logo and stores the resulting
    * translate/scale values as CSS custom properties on the host element.
@@ -83,7 +90,6 @@ export class IntroComponent implements OnInit {
     if (!logoElement || !targetElement) return;
     this.setMotionVars(logoElement.getBoundingClientRect(), targetElement.getBoundingClientRect());
   }
-
 
   /**
    * Writes the motion custom properties used by the stylesheet transitions.
@@ -99,7 +105,6 @@ export class IntroComponent implements OnInit {
     style.setProperty('--intro-fade-ms', `${FADE_DURATION_MS}ms`);
     style.setProperty('--intro-fade-delay-ms', `${FADE_DELAY_MS}ms`);
   }
-
 
   /**
    * Removes the overlay and remembers that the splash ran this session.

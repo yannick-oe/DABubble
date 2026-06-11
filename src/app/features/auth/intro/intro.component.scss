@@ -10,16 +10,46 @@
   background: linear-gradient(180deg, v.color('primary-hover'), v.color('primary'));
 }
 
-.intro__logo {
+.intro__logo-container {
+  display: flex;
+  align-items: center;
   will-change: transform;
-  transform: translate(0, 0) scale(1);
+  transform: translateX(calc(50% - 93.5px));
+  transition: transform 500ms ease-in-out;
+
+  &.intro--step1 {
+    transform: translateX(0);
+  }
+}
+
+.intro__logo {
+  flex: 0 0 187px;
+  width: 187px;
+  height: 184px;
+  display: block;
+}
+
+.intro__text {
+  padding-left: 24px;
+  font-family: v.$font-heading;
+  font-size: 84px;
+  font-weight: 700;
+  color: v.color('white');
+  white-space: nowrap;
+  
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 500ms ease-in-out;
+}
+
+.intro__logo-container.intro--step2 .intro__text {
+  clip-path: inset(0 0 0 0);
 }
 
 .intro--moving {
   opacity: 0;
   transition: opacity var(--intro-fade-ms) ease-out var(--intro-fade-delay-ms);
 
-  .intro__logo {
+  .intro__logo-container {
     transform: translate(var(--intro-dx), var(--intro-dy)) scale(var(--intro-scale));
     transition: transform var(--intro-move-ms) ease-out;
   }
