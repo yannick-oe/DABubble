@@ -9,6 +9,7 @@
           app-message-item
           [entry]="message"
           [threadable]="true"
+          [threadOpen]="message.id === openThreadId()"
           (openThread)="threadRequested.emit(message)"
         ></li>
       }

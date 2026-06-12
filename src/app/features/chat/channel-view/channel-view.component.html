@@ -28,7 +28,8 @@
     <app-message-list
       [messages]="messages()"
       [resetKey]="channelId()"
-      (threadRequested)="openThread($event)"
+      [openThreadId]="openThreadMessageId()"
+      (threadRequested)="toggleThread($event)"
     />
   </div>
 

@@ -51,6 +51,8 @@ export class MessageListComponent {
 
   readonly resetKey = input.required<string>();
 
+  readonly openThreadId = input<string | null>(null);
+
   readonly threadRequested = output<Message>();
 
   private readonly locale = inject(LOCALE_ID);

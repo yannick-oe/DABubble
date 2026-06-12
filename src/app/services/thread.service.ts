@@ -35,6 +35,30 @@ export class ThreadService {
 
 
   /**
+   * Toggles the panel: closes it when the requested thread is already
+   * open, otherwise opens or switches to the requested thread.
+   * @param context Origin message path and header label.
+   */
+  toggle(context: ThreadContext): void {
+    if (this.context()?.messagePath === context.messagePath) this.close();
+    else this.open(context);
+  }
+
+
+  /**
+   * Returns the open thread's message id when it belongs to the given
+   * messages collection, otherwise null. Lets chat views mark the message
+   * whose thread is open without duplicating path logic.
+   * @param collectionPath Firestore path of the messages collection.
+   */
+  openMessageIdIn(collectionPath: string): string | null {
+    const messagePath = this.context()?.messagePath;
+    const prefix = `${collectionPath}/`;
+    return messagePath?.startsWith(prefix) ? messagePath.slice(prefix.length) : null;
+  }
+
+
+  /**
    * Closes the panel.
    */
   close(): void {

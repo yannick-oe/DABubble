@@ -8,7 +8,12 @@
   <p class="message__bubble">{{ entry().text }}</p>
   @if (threadable() && replyCount() > 0) {
     <div class="message__thread">
-      <button class="message__thread-link" type="button" (click)="openThread.emit()">
+      <button
+        class="message__thread-link"
+        type="button"
+        [attr.aria-expanded]="threadOpen()"
+        (click)="openThread.emit()"
+      >
         {{ replyLabel() }}
       </button>
       <span class="message__thread-meta">Letzte Antwort {{ lastReplyTime() }}</span>
@@ -21,6 +26,7 @@
     class="message__thread-start"
     type="button"
     aria-label="Thread starten"
+    [attr.aria-expanded]="threadOpen()"
     (click)="openThread.emit()"
   >
     <img src="/icons/comment.svg" alt="" aria-hidden="true" />

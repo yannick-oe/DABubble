@@ -43,6 +43,8 @@ export class MessageItemComponent {
 
   readonly threadable = input(false);
 
+  readonly threadOpen = input(false);
+
   readonly openThread = output<void>();
 
   private readonly userService = inject(UserService);

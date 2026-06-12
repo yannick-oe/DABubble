@@ -81,6 +81,8 @@ export class DirectMessageViewComponent {
 
   protected readonly composerPlaceholder = computed(() => `Nachricht an ${this.partnerName()}`);
 
+  protected readonly openThreadMessageId = computed(() => this.resolveOpenThreadMessageId());
+
 
   /**
    * Focuses the composer on every conversation switch.
@@ -115,14 +117,28 @@ export class DirectMessageViewComponent {
 
 
   /**
-   * Opens the thread panel for a direct message.
+   * Toggles the thread panel for a direct message: closes it when the
+   * message's thread is already open, otherwise opens or switches to it.
    * @param message Message whose thread was requested.
    */
-  protected openThread(message: Message): void {
-    this.threadService.open({
+  protected toggleThread(message: Message): void {
+    this.threadService.toggle({
       messagePath: this.directMessageService.messagePathFor(this.uid(), message.id),
       contextLabel: this.partnerName(),
     });
+  }
+
+
+  /**
+   * Resolves the id of the message whose thread is open in this
+   * conversation; null while signed out (session still restoring) because
+   * the conversation path depends on the signed-in uid.
+   */
+  private resolveOpenThreadMessageId(): string | null {
+    if (!this.authService.currentUser()) return null;
+    return this.threadService.openMessageIdIn(
+      this.directMessageService.messagesPathWith(this.uid()),
+    );
   }
 
 

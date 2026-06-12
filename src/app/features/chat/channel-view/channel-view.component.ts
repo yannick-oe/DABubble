@@ -76,6 +76,10 @@ export class ChannelViewComponent {
     () => `Nachricht an #${this.channel()?.name ?? ''}`,
   );
 
+  protected readonly openThreadMessageId = computed(() =>
+    this.threadService.openMessageIdIn(channelMessagesPath(this.channelId())),
+  );
+
 
   /**
    * Focuses the composer on every channel switch.
@@ -110,11 +114,12 @@ export class ChannelViewComponent {
 
 
   /**
-   * Opens the thread panel for a channel message.
+   * Toggles the thread panel for a channel message: closes it when the
+   * message's thread is already open, otherwise opens or switches to it.
    * @param message Message whose thread was requested.
    */
-  protected openThread(message: Message): void {
-    this.threadService.open({
+  protected toggleThread(message: Message): void {
+    this.threadService.toggle({
       messagePath: `${channelMessagesPath(this.channelId())}/${message.id}`,
       contextLabel: `# ${this.channel()?.name ?? ''}`,
     });

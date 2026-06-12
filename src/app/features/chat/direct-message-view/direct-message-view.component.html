@@ -31,7 +31,8 @@
       <app-message-list
         [messages]="messages()"
         [resetKey]="uid()"
-        (threadRequested)="openThread($event)"
+        [openThreadId]="openThreadMessageId()"
+        (threadRequested)="toggleThread($event)"
       />
     </div>
   }
