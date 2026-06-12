@@ -61,6 +61,8 @@ export class MessageService {
 
   private readonly injector = inject(EnvironmentInjector);
 
+  private readonly notificationSound = new Audio('sounds/chat-notification.mp3');
+
 
   /**
    * Streams a messages collection live, oldest first. Safe to call from
@@ -90,6 +92,7 @@ export class MessageService {
     await runInInjectionContext(this.injector, () =>
       addDoc(collection(this.firestore, collectionPath), message),
     );
+    this.playNotificationSound();
   }
 
 
@@ -131,6 +134,7 @@ export class MessageService {
       });
       return batch.commit();
     });
+    this.playNotificationSound();
   }
 
 
@@ -238,6 +242,15 @@ export class MessageService {
     return (collectionData(messagesQuery, { idField: 'id' }) as Observable<Message[]>).pipe(
       catchError(() => this.reportLoadError()),
     );
+  }
+
+
+  /**
+   * Plays the chat notification sound, restarting it if already playing.
+   */
+  private playNotificationSound(): void {
+    this.notificationSound.currentTime = 0;
+    this.notificationSound.play().catch(() => { /* autoplay blocked */ });
   }
 
 

@@ -43,6 +43,10 @@
   &:hover .shell__menu-toggle-label {
     color: v.color('primary');
   }
+
+  &:hover .shell__menu-toggle-icon {
+    filter: brightness(0) saturate(100%) invert(29%) sepia(93%) saturate(3686%) hue-rotate(234deg) brightness(97%) contrast(93%);
+  }
 }
 
 .shell__menu-toggle-icon {

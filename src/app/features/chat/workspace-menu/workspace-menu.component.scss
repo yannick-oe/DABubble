@@ -80,12 +80,25 @@
   text-align: left;
 }
 
+.workspace__collapsible {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows v.$transition-slow, opacity v.$transition-base;
+
+  &--open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
 .workspace__list {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: v.space('md');
   padding-left: v.space('xxl');
+  overflow: hidden;
 }
 
 .workspace__item {
@@ -144,7 +157,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .workspace__caret {
+  .workspace__caret,
+  .workspace__collapsible {
     transition: none;
   }
 }
