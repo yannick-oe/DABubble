@@ -7,8 +7,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UserDoc } from '../../../models/user.model';
 import { AuthService } from '../../../services/auth.service';
 import { ChannelService } from '../../../services/channel.service';
+import { LayoutService } from '../../../services/layout.service';
 import { DEFAULT_AVATAR_PATH } from '../../../services/registration.service';
 import { UserService } from '../../../services/user.service';
+import { ProfileDialogComponent } from '../../profile/profile-dialog/profile-dialog.component';
+import { SearchBarComponent } from '../../search/search-bar/search-bar.component';
 import { ChannelCreateDialogComponent } from '../channel-create-dialog/channel-create-dialog.component';
 
 const GUEST_NAME = 'Gast';
@@ -28,7 +31,13 @@ interface SelfEntry {
  */
 @Component({
   selector: 'app-workspace-menu',
-  imports: [RouterLink, RouterLinkActive, ChannelCreateDialogComponent],
+  imports: [
+    ChannelCreateDialogComponent,
+    ProfileDialogComponent,
+    RouterLink,
+    RouterLinkActive,
+    SearchBarComponent,
+  ],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +56,10 @@ export class WorkspaceMenuComponent {
   protected readonly directOpen = signal(true);
 
   protected readonly dialogOpen = signal(false);
+
+  protected readonly profileUid = signal<string | null>(null);
+
+  protected readonly isMobile = inject(LayoutService).isMobile;
 
   protected readonly self = computed(() => this.buildSelfEntry());
 

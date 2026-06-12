@@ -51,7 +51,10 @@
       "Bash(node .claude-tmp/verify-m9.mjs)",
       "Bash(sed -n '226,275p' src/app/services/message.service.ts)",
       "Bash(ls public/sounds/)",
-      "Bash(node .claude-tmp/verify-join.mjs)"
+      "Bash(node .claude-tmp/verify-join.mjs)",
+      "Bash(node .claude-tmp/seed.mjs)",
+      "Bash(node .claude-tmp/verify-m10b.mjs)",
+      "Bash(node .claude-tmp/reset-channel.mjs)"
     ]
   }
 }

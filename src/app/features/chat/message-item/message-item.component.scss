@@ -203,6 +203,7 @@
   transition: opacity v.$transition-fast;
 
   :host(:hover) &,
+  :host(.message--bar-open) &,
   &:focus-within {
     opacity: 1;
   }
@@ -243,5 +244,15 @@
 
   .message__bubble {
     padding: v.space('sm-md') v.space('md');
+  }
+
+  .message__picker {
+    left: 0;
+    right: auto;
+
+    :host(.message--own) & {
+      left: auto;
+      right: 0;
+    }
   }
 }

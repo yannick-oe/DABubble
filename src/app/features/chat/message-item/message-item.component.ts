@@ -33,6 +33,7 @@ const TIME_FORMAT = 'HH:mm';
 const UNKNOWN_AUTHOR = 'Unbekannt';
 const ACTION_ERROR = 'Die Aktion konnte nicht ausgeführt werden.';
 const EDIT_WINDOW_MS = 15 * 60 * 1000;
+const LONG_PRESS_MS = 500;
 
 /**
  * One message row per the Figma chat frames: avatar, author meta, bubble,
@@ -51,7 +52,12 @@ const EDIT_WINDOW_MS = 15 * 60 * 1000;
     class: 'message',
     '[class.message--own]': 'own()',
     '[class.message--focus]': 'focusHighlight()',
+    '[class.message--bar-open]': 'barOpen()',
     '[id]': '"message-" + entry().id',
+    '(touchstart)': 'startLongPress()',
+    '(touchend)': 'cancelLongPress()',
+    '(touchmove)': 'cancelLongPress()',
+    '(document:click)': 'onDocumentClick($event)',
   },
 })
 export class MessageItemComponent {
@@ -84,6 +90,12 @@ export class MessageItemComponent {
   private readonly locale = inject(LOCALE_ID);
 
   private readonly editTextarea = viewChild<ElementRef<HTMLTextAreaElement>>('editTextarea');
+
+  private readonly host = inject(ElementRef<HTMLElement>);
+
+  private longPressTimer: ReturnType<typeof setTimeout> | null = null;
+
+  protected readonly barOpen = signal(false);
 
   protected readonly editFieldId = `message-edit-${MessageItemComponent.instanceCounter++}`;
 
@@ -134,6 +146,44 @@ export class MessageItemComponent {
 
 
   /**
+   * Arms the long-press timer; touch devices have no hover, so a held
+   * press opens the action bar (convention — no Figma gesture exists).
+   */
+  protected startLongPress(): void {
+    this.cancelLongPress();
+    this.longPressTimer = setTimeout(() => this.barOpen.set(true), LONG_PRESS_MS);
+  }
+
+
+  /**
+   * Cancels a pending long press (touch ended or moved).
+   */
+  protected cancelLongPress(): void {
+    if (this.longPressTimer) clearTimeout(this.longPressTimer);
+    this.longPressTimer = null;
+  }
+
+
+  /**
+   * Closes the long-press action bar when tapping outside the row.
+   * @param event Document-level click event.
+   */
+  protected onDocumentClick(event: Event): void {
+    if (!this.barOpen()) return;
+    if (!this.host.nativeElement.contains(event.target as Node)) this.barOpen.set(false);
+  }
+
+
+  /**
+   * Emits the thread toggle and closes the long-press bar.
+   */
+  protected requestThread(): void {
+    this.barOpen.set(false);
+    this.openThread.emit();
+  }
+
+
+  /**
    * Reports whether the own message is still inside the 15-minute edit
    * window; evaluated per change detection because it is time-based.
    */
@@ -156,6 +206,7 @@ export class MessageItemComponent {
     if (!uids.includes(this.authService.currentUser()?.uid ?? '')) {
       this.recentEmojiService.record(emoji);
     }
+    this.barOpen.set(false);
     await this.runAction(() => this.messageService.toggleReaction(messagePath, emoji, uids));
   }
 
@@ -174,6 +225,7 @@ export class MessageItemComponent {
    * Enters edit mode with the current text and focuses the textarea.
    */
   protected startEdit(): void {
+    this.barOpen.set(false);
     this.editText.set(this.entry().text);
     this.editing.set(true);
     requestAnimationFrame(() => this.editTextarea()?.nativeElement.focus());
@@ -237,6 +289,7 @@ export class MessageItemComponent {
    * Hides the message for the signed-in user only.
    */
   protected async onDeleteForMe(): Promise<void> {
+    this.barOpen.set(false);
     const messagePath = this.messagePath();
     if (!messagePath) return;
     await this.runAction(() => this.messageService.hideForMe(messagePath));
@@ -247,6 +300,7 @@ export class MessageItemComponent {
    * Deletes the message for everyone (tombstone).
    */
   protected async onDeleteForAll(): Promise<void> {
+    this.barOpen.set(false);
     const messagePath = this.messagePath();
     if (!messagePath) return;
     await this.runAction(() => this.messageService.deleteForAll(messagePath));

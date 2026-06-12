@@ -91,7 +91,7 @@
       [canEdit]="canEditNow()"
       (reacted)="react($event)"
       (pickerRequested)="reactionPickerOpen.set(true)"
-      (threadToggled)="openThread.emit()"
+      (threadToggled)="requestThread()"
       (editRequested)="startEdit()"
       (deleteForMe)="onDeleteForMe()"
       (deleteForAll)="onDeleteForAll()"

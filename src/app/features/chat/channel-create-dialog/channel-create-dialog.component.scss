@@ -190,3 +190,24 @@ $results-max-height: 240px;
     animation: none;
   }
 }
+
+@include m.sheet-keyframes;
+
+@include m.respond-md {
+  .create-channel {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .create-channel__dialog {
+    @include m.sheet-card;
+
+    padding: v.space('md') v.space('md') v.space('lg');
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .create-channel__dialog {
+    animation: none;
+  }
+}

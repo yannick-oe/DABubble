@@ -87,3 +87,29 @@
     animation: none;
   }
 }
+
+@include m.sheet-keyframes;
+
+@include m.respond-md {
+  .dialog-shell {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .dialog-shell__card,
+  .dialog-shell__card--members,
+  .dialog-shell__card--add-members,
+  .dialog-shell__card--profile,
+  .dialog-shell__card--menu {
+    @include m.sheet-card;
+
+    position: static;
+    padding: v.space('md') v.space('md') v.space('lg');
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog-shell__card {
+    animation: none;
+  }
+}

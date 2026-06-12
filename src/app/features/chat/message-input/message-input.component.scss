@@ -99,4 +99,8 @@
   .composer__suggestions {
     right: 0;
   }
+
+  .composer__picker {
+    left: calc(-1 * #{v.space('lg')});
+  }
 }

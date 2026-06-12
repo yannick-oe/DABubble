@@ -17,6 +17,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
+import { LayoutService } from '../../../services/layout.service';
 import { MessageFocusService } from '../../../services/message-focus.service';
 import { DEFAULT_AVATAR_PATH } from '../../../services/registration.service';
 import {
@@ -29,6 +30,8 @@ import {
 
 const DEBOUNCE_MS = 250;
 const MIN_TERM_LENGTH = 2;
+const DESKTOP_PLACEHOLDER = 'Devspace durchsuchen';
+const MOBILE_PLACEHOLDER = 'Gehe zu...';
 
 type SearchHit = ChannelHit | UserHit | MessageHit;
 
@@ -59,6 +62,12 @@ export class SearchBarComponent {
   private readonly router = inject(Router);
 
   private readonly host = inject(ElementRef<HTMLElement>);
+
+  private readonly layoutService = inject(LayoutService);
+
+  protected readonly placeholder = computed(() =>
+    this.layoutService.isMobile() ? MOBILE_PLACEHOLDER : DESKTOP_PLACEHOLDER,
+  );
 
   private readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 

@@ -1,12 +1,12 @@
 <div class="search-bar">
-  <label class="sr-only" for="topbar-search">Devspace durchsuchen</label>
+  <label class="sr-only" for="topbar-search">{{ placeholder() }}</label>
   <input
     #searchInput
     id="topbar-search"
     class="form-input search-bar__input"
     type="search"
     [formControl]="searchControl"
-    placeholder="Devspace durchsuchen"
+    [placeholder]="placeholder()"
     role="combobox"
     [attr.aria-expanded]="results() !== null"
     [attr.aria-activedescendant]="

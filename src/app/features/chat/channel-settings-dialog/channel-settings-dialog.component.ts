@@ -6,7 +6,11 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output, si
 import { Router } from '@angular/router';
 
 import { Channel } from '../../../models/channel.model';
+import { UserDoc } from '../../../models/user.model';
+import { AuthService } from '../../../services/auth.service';
 import { ChannelService } from '../../../services/channel.service';
+import { LayoutService } from '../../../services/layout.service';
+import { DEFAULT_AVATAR_PATH } from '../../../services/registration.service';
 import { ToastService } from '../../../services/toast.service';
 import { UserService } from '../../../services/user.service';
 import {
@@ -19,6 +23,14 @@ const NAME_DUPLICATE_ERROR = 'Ein Channel mit diesem Namen existiert bereits.';
 const SAVE_ERROR = 'Die Änderung konnte nicht gespeichert werden.';
 const LEAVE_ERROR = 'Der Channel konnte nicht verlassen werden.';
 const UNKNOWN_CREATOR = 'Unbekannt';
+const SELF_SUFFIX = ' (Du)';
+
+/** Resolved member row of the mobile members section. */
+interface MemberRow {
+  readonly uid: string;
+  readonly name: string;
+  readonly avatar: string;
+}
 
 /**
  * "Channel Edition" dialog per the Figma frame: name and description each
@@ -41,9 +53,17 @@ export class ChannelSettingsDialogComponent {
 
   readonly closed = output<void>();
 
+  readonly memberSelected = output<string>();
+
+  readonly addMembersRequested = output<void>();
+
   private readonly channelService = inject(ChannelService);
 
   private readonly userService = inject(UserService);
+
+  private readonly authService = inject(AuthService);
+
+  private readonly layoutService = inject(LayoutService);
 
   private readonly toastService = inject(ToastService);
 
@@ -61,7 +81,11 @@ export class ChannelSettingsDialogComponent {
 
   protected readonly pending = signal(false);
 
+  protected readonly isMobile = this.layoutService.isMobile;
+
   protected readonly hasCreator = computed(() => Boolean(this.channel().createdBy));
+
+  protected readonly members = computed(() => this.resolveMembers());
 
   protected readonly creatorName = computed(
     () =>
@@ -144,6 +168,27 @@ export class ChannelSettingsDialogComponent {
       this.toastService.show(LEAVE_ERROR);
       this.pending.set(false);
     }
+  }
+
+
+  /**
+   * Resolves the member rows of the mobile members section, self first
+   * with the "(Du)" suffix (the frame composes members into the sheet).
+   */
+  private resolveMembers(): MemberRow[] {
+    const selfUid = this.authService.currentUser()?.uid;
+    const users = this.userService.users();
+    const rows = this.channel()
+      .memberIds.map(uid => users.find(user => user.uid === uid))
+      .filter((user): user is UserDoc => user !== undefined)
+      .map(user => ({
+        uid: user.uid,
+        name: user.uid === selfUid ? `${user.name}${SELF_SUFFIX}` : user.name,
+        avatar: user.avatarPath.startsWith('http')
+          ? `/${DEFAULT_AVATAR_PATH}`
+          : `/${user.avatarPath}`,
+      }));
+    return rows.sort((a, b) => Number(b.uid === selfUid) - Number(a.uid === selfUid));
   }
 
 

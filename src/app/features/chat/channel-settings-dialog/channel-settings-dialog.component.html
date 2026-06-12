@@ -9,7 +9,17 @@
   <section class="settings__card">
     <div class="settings__card-head">
       <span class="settings__label">Channel-Name</span>
-      @if (editingName()) {
+      @if (isMobile()) {
+        <button
+          class="settings__icon-btn"
+          type="button"
+          [attr.aria-label]="editingName() ? 'Channel-Name speichern' : 'Channel-Name bearbeiten'"
+          [disabled]="editingName() && pending()"
+          (click)="editingName() ? saveName() : startNameEdit()"
+        >
+          <img [src]="editingName() ? '/icons/check-circle.svg' : '/icons/edit.svg'" alt="" aria-hidden="true" />
+        </button>
+      } @else if (editingName()) {
         <button class="settings__link" type="button" [disabled]="pending()" (click)="saveName()">
           Speichern
         </button>
@@ -40,7 +50,17 @@
   <section class="settings__card">
     <div class="settings__card-head">
       <span class="settings__label">Beschreibung</span>
-      @if (editingDescription()) {
+      @if (isMobile()) {
+        <button
+          class="settings__icon-btn"
+          type="button"
+          [attr.aria-label]="editingDescription() ? 'Beschreibung speichern' : 'Beschreibung bearbeiten'"
+          [disabled]="editingDescription() && pending()"
+          (click)="editingDescription() ? saveDescription() : startDescriptionEdit()"
+        >
+          <img [src]="editingDescription() ? '/icons/check-circle.svg' : '/icons/edit.svg'" alt="" aria-hidden="true" />
+        </button>
+      } @else if (editingDescription()) {
         <button class="settings__link" type="button" [disabled]="pending()" (click)="saveDescription()">
           Speichern
         </button>
@@ -71,6 +91,31 @@
       </div>
     }
   </section>
+
+  @if (isMobile()) {
+    <section class="settings__card">
+      <h3 class="settings__members-title">Mitglieder</h3>
+      <ul class="settings__members">
+        @for (member of members(); track member.uid) {
+          <li>
+            <button
+              class="settings__member"
+              type="button"
+              [attr.aria-label]="'Profil von ' + member.name + ' anzeigen'"
+              (click)="memberSelected.emit(member.uid)"
+            >
+              <img class="settings__member-avatar" [src]="member.avatar" alt="" aria-hidden="true" />
+              {{ member.name }}
+            </button>
+          </li>
+        }
+      </ul>
+      <button class="settings__member settings__member--add" type="button" (click)="addMembersRequested.emit()">
+        <img class="settings__member-add-icon" src="/icons/add-person.svg" alt="" aria-hidden="true" />
+        Mitglieder hinzufügen
+      </button>
+    </section>
+  }
 
   <footer class="settings__actions">
     <button class="btn btn-primary" type="button" [disabled]="pending()" (click)="leave()">

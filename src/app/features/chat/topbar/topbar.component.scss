@@ -165,3 +165,8 @@
     padding: v.space('sm-md') v.space('md');
   }
 }
+
+.topbar__brand-logo {
+  height: v.$btn-height-sm;
+  width: auto;
+}

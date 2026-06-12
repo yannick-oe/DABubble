@@ -64,6 +64,8 @@
         [channel]="currentChannel"
         [anchor]="dialogAnchor()"
         (closed)="dialog.set(null)"
+        (memberSelected)="openProfile($event)"
+        (addMembersRequested)="dialog.set('add')"
       />
     }
     @case ('members') {

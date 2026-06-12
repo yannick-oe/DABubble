@@ -145,3 +145,36 @@
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+// ─── Mobile Bottom Sheet ──────────────────────────────────────────────────────
+
+@mixin sheet-card {
+  width: 100%;
+  max-width: 100%;
+  max-height: calc(100dvh - #{v.space('xxl')});
+  border-radius: v.$radius-xl v.$radius-xl 0 0;
+  animation: sheet-slide-up v.$transition-slow both;
+
+  &::before {
+    content: '';
+    align-self: center;
+    flex-shrink: 0;
+    width: v.space('xxl');
+    height: v.space('xs');
+    margin-bottom: v.space('sm');
+    border-radius: v.$radius-pill;
+    background-color: v.color('lines');
+  }
+}
+
+@mixin sheet-keyframes {
+  @keyframes sheet-slide-up {
+    from {
+      transform: translateY(100%);
+    }
+
+    to {
+      transform: translateY(0);
+    }
+  }
+}

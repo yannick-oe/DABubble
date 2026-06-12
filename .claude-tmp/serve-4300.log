@@ -1,0 +1,66 @@
+❯ Building...
+✔ Building...
+Initial chunk files | Names                         |  Raw size
+styles.css          | styles                        |  14.93 kB | 
+main.js             | main                          |  11.68 kB | 
+chunk-FBUJHRSK.js   | -                             |   1.77 kB | 
+chunk-FAS3Y2JK.js   | -                             |   1.30 kB | 
+
+                    | Initial total                 |  29.69 kB
+
+Lazy chunk files    | Names                         |  Raw size
+chunk-RAN6VQ6X.js   | app-shell-component           | 155.73 kB | 
+chunk-SHHAUS7X.js   | -                             | 125.06 kB | 
+chunk-LT7Z3KIO.js   | channel-view-component        |  93.30 kB | 
+chunk-SP2OZERA.js   | -                             |  51.29 kB | 
+chunk-HLQUY674.js   | login-component               |  27.33 kB | 
+chunk-4YDTEHKI.js   | new-message-component         |  22.45 kB | 
+chunk-VRPPO5HH.js   | direct-message-view-component |  20.68 kB | 
+chunk-55GZDFDV.js   | register-component            |  17.07 kB | 
+chunk-75QA5EIL.js   | reset-password-component      |  16.85 kB | 
+chunk-MHQ6E36O.js   | avatar-picker-component       |  15.02 kB | 
+chunk-LTODVXGF.js   | -                             |  14.18 kB | 
+chunk-55RHAKGQ.js   | privacy-component             |  12.81 kB | 
+chunk-RQ54VEVU.js   | forgot-password-component     |  12.47 kB | 
+chunk-NWQBWIBI.js   | auth-layout-component         |  12.41 kB | 
+chunk-HT2IFQML.js   | -                             |   9.44 kB | 
+...and 7 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [1.697 seconds] - 2026-06-12T16:51:11.593Z
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  ➜  Local:   http://localhost:4300/
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names                         |  Raw size
+main.js             | main                          |  11.68 kB | 
+
+Lazy chunk files    | Names                         |  Raw size
+chunk-3NVGA2J7.js   | app-shell-component           | 155.73 kB | 
+chunk-GBL6PEDW.js   | -                             | 125.39 kB | 
+chunk-LAUQWIAR.js   | channel-view-component        |  93.30 kB | 
+chunk-P7QYRDKM.js   | direct-message-view-component |  20.68 kB | 
+chunk-EHTUDSTN.js   | -                             |  14.18 kB | 
+
+Application bundle generation complete. [0.725 seconds] - 2026-06-12T17:03:52.265Z
+
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names                         |  Raw size
+main.js             | main                          |  11.68 kB | 
+
+Lazy chunk files    | Names                         |  Raw size
+chunk-O33HQTL4.js   | app-shell-component           | 155.73 kB | 
+chunk-MQKAPLQC.js   | -                             | 125.39 kB | 
+chunk-HB2ZEWTV.js   | channel-view-component        |  93.30 kB | 
+chunk-AKPLRACY.js   | -                             |  51.42 kB | 
+chunk-5TWJMTHM.js   | new-message-component         |  22.45 kB | 
+chunk-ODHUNVYB.js   | direct-message-view-component |  20.68 kB | 
+chunk-FL5XEBNE.js   | -                             |  14.18 kB | 
+chunk-45UOS6CH.js   | -                             |   4.36 kB | 
+
+Application bundle generation complete. [0.257 seconds] - 2026-06-12T17:06:24.355Z
+
+Component update sent to client(s).
