@@ -54,7 +54,7 @@
           />
           <span class="topbar__status" aria-hidden="true"></span>
         </span>
-        <img class="topbar__chevron" src="/icons/arrow-drop-down.svg" alt="" aria-hidden="true" />
+        <img class="topbar__chevron" src="/icons/arrow-down.svg" alt="" aria-hidden="true" />
       </button>
     </div>
   }
@@ -77,5 +77,5 @@
 }
 
 @if (profileUid(); as uid) {
-  <app-profile-dialog [uid]="uid" (closed)="profileUid.set(null)" />
+  <app-profile-dialog [uid]="uid" [anchor]="menuAnchor()" (closed)="profileUid.set(null)" />
 }

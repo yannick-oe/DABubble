@@ -10,7 +10,7 @@ import { DEFAULT_AVATAR_PATH } from '../../../services/registration.service';
 import { ToastService } from '../../../services/toast.service';
 import { UserService } from '../../../services/user.service';
 import { AVATAR_OPTIONS } from '../../../shared/avatar-options';
-import { DialogShellComponent } from '../../../shared/dialog-shell/dialog-shell.component';
+import { DialogAnchor, DialogShellComponent } from '../../../shared/dialog-shell/dialog-shell.component';
 
 const NAME_REQUIRED_ERROR = 'Bitte gib deinen Namen ein.';
 const SAVE_ERROR = 'Das Profil konnte nicht gespeichert werden.';
@@ -36,6 +36,8 @@ type ProfileMode = 'view' | 'edit';
 })
 export class ProfileDialogComponent {
   readonly uid = input.required<string>();
+
+  readonly anchor = input<DialogAnchor | null>(null);
 
   readonly closed = output<void>();
 

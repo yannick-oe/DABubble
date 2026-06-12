@@ -37,7 +37,7 @@
   border: none;
   border-radius: 0 v.$radius-md v.$radius-md 0;
   background-color: v.color('white');
-  box-shadow: v.$shadow-sm;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   transform: translateY(-50%);
 

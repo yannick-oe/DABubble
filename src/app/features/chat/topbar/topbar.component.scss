@@ -31,16 +31,21 @@
 .topbar__user {
   display: flex;
   align-items: center;
-  gap: v.space('md');
+  gap: v.space('lg');
   padding: v.space('xs') v.space('sm');
   border: none;
   background: none;
   border-radius: v.$radius-pill;
   cursor: pointer;
-  transition: background-color v.$transition-fast;
 
   &:hover {
-    background-color: v.color('white');
+    .topbar__user-name {
+      color: v.color('primary-hover');
+    }
+
+    .topbar__chevron {
+      content: url('/icons/arrow-down-hover.svg');
+    }
   }
 }
 
@@ -81,6 +86,7 @@
   font-size: v.font-size('h3');
   font-weight: v.$font-weight-bold;
   color: v.color('black');
+  transition: color v.$transition-fast;
 }
 
 .topbar__avatar-wrap {
@@ -104,8 +110,8 @@
 }
 
 .topbar__chevron {
-  width: v.$icon-md;
-  height: v.$icon-md;
+  width: 14px;
+  height: 14px;
 }
 
 .topbar__back {

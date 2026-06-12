@@ -1,4 +1,4 @@
-<app-dialog-shell labelledBy="profile-dialog-title" size="profile" (closed)="closed.emit()">
+<app-dialog-shell [anchor]="anchor()" labelledBy="profile-dialog-title" size="profile" (closed)="closed.emit()">
   <header class="profile__head">
     <h2 class="profile__title" id="profile-dialog-title">
       {{ mode() === 'edit' ? 'Dein Profil bearbeiten' : 'Profil' }}
