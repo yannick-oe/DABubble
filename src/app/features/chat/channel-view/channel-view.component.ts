@@ -8,6 +8,7 @@ import {
   effect,
   inject,
   input,
+  signal,
   viewChild,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -22,11 +23,16 @@ import { DEFAULT_AVATAR_PATH } from '../../../services/registration.service';
 import { ThreadService } from '../../../services/thread.service';
 import { ToastService } from '../../../services/toast.service';
 import { UserService } from '../../../services/user.service';
+import { ChannelAddMembersDialogComponent } from '../channel-add-members-dialog/channel-add-members-dialog.component';
+import { ChannelMembersDialogComponent } from '../channel-members-dialog/channel-members-dialog.component';
+import { ChannelSettingsDialogComponent } from '../channel-settings-dialog/channel-settings-dialog.component';
 import { MessageInputComponent } from '../message-input/message-input.component';
 import { MessageListComponent } from '../message-list/message-list.component';
 
 const SEND_ERROR = 'Die Nachricht konnte nicht gesendet werden.';
 const HEAD_AVATAR_LIMIT = 3;
+
+type ChannelDialog = 'settings' | 'members' | 'add';
 
 /**
  * Chat view of a channel per Figma frames 06/09: header with name and
@@ -35,7 +41,13 @@ const HEAD_AVATAR_LIMIT = 3;
  */
 @Component({
   selector: 'app-channel-view',
-  imports: [MessageInputComponent, MessageListComponent],
+  imports: [
+    ChannelAddMembersDialogComponent,
+    ChannelMembersDialogComponent,
+    ChannelSettingsDialogComponent,
+    MessageInputComponent,
+    MessageListComponent,
+  ],
   templateUrl: './channel-view.component.html',
   styleUrl: './channel-view.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,6 +68,8 @@ export class ChannelViewComponent {
   private readonly composer = viewChild(MessageInputComponent);
 
   private focusedChannelId: string | null = null;
+
+  protected readonly dialog = signal<ChannelDialog | null>(null);
 
   protected readonly messages = toSignal(
     toObservable(this.channelId).pipe(

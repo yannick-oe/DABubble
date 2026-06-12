@@ -1,0 +1,37 @@
+@use 'variables' as v;
+@use 'mixins' as m;
+
+.dialog-shell {
+  position: fixed;
+  inset: 0;
+  z-index: v.$z-modal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: v.space('md');
+  background-color: v.$overlay-scrim;
+}
+
+.dialog-shell__card {
+  display: flex;
+  flex-direction: column;
+  gap: v.space('lg');
+  width: min(v.$dialog-width, 100%);
+  max-height: calc(100dvh - #{v.space('xl')});
+  padding: v.space('xl-xxl');
+  border-radius: v.$radius-xl;
+  background-color: v.color('white');
+  box-shadow: v.$shadow-lg;
+  overflow-y: auto;
+  @include m.scrollbar-thin;
+
+  &--sm {
+    width: min(v.$dialog-width-sm, 100%);
+    padding: v.space('xl');
+  }
+
+  @include m.respond-sm {
+    padding: v.space('lg');
+    border-radius: v.$radius-md;
+  }
+}

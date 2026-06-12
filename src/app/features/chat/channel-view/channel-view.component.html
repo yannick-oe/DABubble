@@ -1,13 +1,25 @@
 <section class="channel">
   <header class="channel__head">
-    <button class="channel__title" type="button" aria-label="Channel-Details öffnen">
+    <button
+      class="channel__title"
+      type="button"
+      aria-label="Channel-Details öffnen"
+      [attr.aria-expanded]="dialog() === 'settings'"
+      (click)="dialog.set('settings')"
+    >
       <img class="channel__title-icon" src="/icons/tag.svg" alt="" aria-hidden="true" />
       <span class="channel__name">{{ channel()?.name }}</span>
       <img class="channel__caret" src="/icons/arrow-drop-down.svg" alt="" aria-hidden="true" />
     </button>
 
     <div class="channel__members">
-      <button class="channel__members-list" type="button" aria-label="Mitglieder anzeigen">
+      <button
+        class="channel__members-list"
+        type="button"
+        aria-label="Mitglieder anzeigen"
+        [attr.aria-expanded]="dialog() === 'members'"
+        (click)="dialog.set('members')"
+      >
         @for (member of headMembers(); track member.uid) {
           <img
             class="channel__member-avatar"
@@ -18,7 +30,13 @@
         }
         <span class="channel__member-count">{{ memberCount() }}</span>
       </button>
-      <button class="channel__add-member" type="button" aria-label="Mitglieder hinzufügen">
+      <button
+        class="channel__add-member"
+        type="button"
+        aria-label="Mitglieder hinzufügen"
+        [attr.aria-expanded]="dialog() === 'add'"
+        (click)="dialog.set('add')"
+      >
         <img src="/icons/add-person.svg" alt="" aria-hidden="true" />
       </button>
     </div>
@@ -38,3 +56,21 @@
     <app-message-input [placeholder]="composerPlaceholder()" (send)="sendMessage($event)" />
   </div>
 </section>
+
+@if (channel(); as currentChannel) {
+  @switch (dialog()) {
+    @case ('settings') {
+      <app-channel-settings-dialog [channel]="currentChannel" (closed)="dialog.set(null)" />
+    }
+    @case ('members') {
+      <app-channel-members-dialog
+        [channel]="currentChannel"
+        (closed)="dialog.set(null)"
+        (addRequested)="dialog.set('add')"
+      />
+    }
+    @case ('add') {
+      <app-channel-add-members-dialog [channel]="currentChannel" (closed)="dialog.set(null)" />
+    }
+  }
+}

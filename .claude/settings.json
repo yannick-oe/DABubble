@@ -45,7 +45,8 @@
       "Bash(node .claude-tmp/verify-m6.mjs)",
       "Bash(node .claude-tmp/clean-m6.mjs)",
       "Bash(curl -s -o public/emojis/1f609.svg -w \"wink: %{http_code}\\\\n\" \"https://raw.githubusercontent.com/EmojiTwo/emojitwo/master/svg/1f609.svg\")",
-      "Bash(curl -s -o public/icons/more-vert.svg -w \"more_vert: %{http_code}\\\\n\" \"https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/more_vert/default/24px.svg\")"
+      "Bash(curl -s -o public/icons/more-vert.svg -w \"more_vert: %{http_code}\\\\n\" \"https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/more_vert/default/24px.svg\")",
+      "Bash(node .claude-tmp/verify-m7.mjs)"
     ]
   }
 }

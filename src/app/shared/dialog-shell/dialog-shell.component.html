@@ -1,0 +1,13 @@
+<div class="dialog-shell" (click)="onOverlayClick($event)">
+  <section
+    #card
+    class="dialog-shell__card"
+    [class.dialog-shell__card--sm]="size() === 'sm'"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-labelledby]="labelledBy()"
+    (keydown.tab)="trapFocus($event)"
+  >
+    <ng-content />
+  </section>
+</div>

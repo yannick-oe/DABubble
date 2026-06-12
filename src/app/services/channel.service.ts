@@ -10,16 +10,21 @@ import {
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
+  DocumentReference,
   Firestore,
   Timestamp,
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   collectionData,
+  doc,
   getDocs,
-  limit,
   query,
   serverTimestamp,
+  updateDoc,
   where,
+  writeBatch,
 } from '@angular/fire/firestore';
 import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
 
@@ -28,6 +33,7 @@ import { AuthService } from './auth.service';
 import { ToastService } from './toast.service';
 
 const CHANNELS_LOAD_ERROR = 'Channels konnten nicht geladen werden.';
+const DELETE_BATCH_LIMIT = 450;
 
 /**
  * Streams all channels the signed-in user is a member of and persists new
@@ -77,14 +83,131 @@ export class ChannelService {
 
 
   /**
-   * Checks whether any channel in the whole collection already uses the
-   * given name (case-insensitive, via the denormalized nameLower field).
+   * Checks whether any other channel in the whole collection already uses
+   * the given name (case-insensitive, via the denormalized nameLower field).
    * @param name Channel name typed by the user.
+   * @param excludeChannelId Channel whose own name does not count (rename).
    */
-  isNameTaken(name: string): Promise<boolean> {
+  isNameTaken(name: string, excludeChannelId?: string): Promise<boolean> {
     const normalized = name.trim().toLowerCase();
     if (!normalized) return Promise.resolve(false);
-    return runInInjectionContext(this.injector, () => this.queryNameTaken(normalized));
+    return this.inContext(() => this.queryNameTaken(normalized, excludeChannelId ?? null));
+  }
+
+
+  /**
+   * Renames a channel and keeps the denormalized nameLower in sync.
+   * @param channelId Firestore id of the channel.
+   * @param name Validated, unique new channel name.
+   */
+  renameChannel(channelId: string, name: string): Promise<void> {
+    const trimmed = name.trim();
+    return this.inContext(() =>
+      updateDoc(doc(this.firestore, `channels/${channelId}`), {
+        name: trimmed,
+        nameLower: trimmed.toLowerCase(),
+      }),
+    );
+  }
+
+
+  /**
+   * Replaces a channel's description; an empty description is allowed.
+   * @param channelId Firestore id of the channel.
+   * @param description New description text.
+   */
+  updateDescription(channelId: string, description: string): Promise<void> {
+    return this.inContext(() =>
+      updateDoc(doc(this.firestore, `channels/${channelId}`), {
+        description: description.trim(),
+      }),
+    );
+  }
+
+
+  /**
+   * Adds users to a channel atomically; any member may do this.
+   * @param channelId Firestore id of the channel.
+   * @param memberUids Uids to add to the member list.
+   */
+  addMembers(channelId: string, memberUids: string[]): Promise<void> {
+    return this.inContext(() =>
+      updateDoc(doc(this.firestore, `channels/${channelId}`), {
+        memberIds: arrayUnion(...memberUids),
+      }),
+    );
+  }
+
+
+  /**
+   * Removes the signed-in user from the channel. When the last member
+   * leaves, the channel is deleted entirely including all messages and
+   * thread replies (client-side recursive delete, see CLAUDE.md).
+   * @param channel Channel the user is leaving.
+   */
+  async leaveChannel(channel: Channel): Promise<void> {
+    const uid = this.authService.requireUid();
+    const remaining = channel.memberIds.filter(memberId => memberId !== uid);
+    if (remaining.length === 0) return this.deleteChannelDeep(channel.id);
+    await this.inContext(() =>
+      updateDoc(doc(this.firestore, `channels/${channel.id}`), { memberIds: arrayRemove(uid) }),
+    );
+  }
+
+
+  /**
+   * Deletes a channel with all message and reply documents. Firestore does
+   * not cascade subcollection deletes, so every document is collected and
+   * removed in chunked batches.
+   * @param channelId Firestore id of the channel.
+   */
+  private async deleteChannelDeep(channelId: string): Promise<void> {
+    const references = await this.collectChannelDocRefs(channelId);
+    await this.commitDeletes(references);
+  }
+
+
+  /**
+   * Collects the references of all reply, message and channel documents.
+   * @param channelId Firestore id of the channel.
+   */
+  private async collectChannelDocRefs(channelId: string): Promise<DocumentReference[]> {
+    const references: DocumentReference[] = [];
+    const messages = await this.inContext(() =>
+      getDocs(collection(this.firestore, `channels/${channelId}/messages`)),
+    );
+    for (const message of messages.docs) {
+      const replies = await this.inContext(() => getDocs(collection(message.ref, 'replies')));
+      references.push(...replies.docs.map(reply => reply.ref), message.ref);
+    }
+    references.push(doc(this.firestore, `channels/${channelId}`));
+    return references;
+  }
+
+
+  /**
+   * Deletes the given documents in batches below the Firestore batch limit.
+   * @param references Document references to delete, children first.
+   */
+  private async commitDeletes(references: DocumentReference[]): Promise<void> {
+    for (let start = 0; start < references.length; start += DELETE_BATCH_LIMIT) {
+      const chunk = references.slice(start, start + DELETE_BATCH_LIMIT);
+      await this.inContext(() => {
+        const batch = writeBatch(this.firestore);
+        chunk.forEach(reference => batch.delete(reference));
+        return batch.commit();
+      });
+    }
+  }
+
+
+  /**
+   * Runs a Firebase API call in the injection context; required because
+   * AngularFire warns about calls scheduled from event handlers.
+   * @param operation Firebase call to execute.
+   */
+  private inContext<T>(operation: () => T): T {
+    return runInInjectionContext(this.injector, operation);
   }
 
 
@@ -92,15 +215,15 @@ export class ChannelService {
    * Runs the duplicate-name query; created in the injection context as
    * required by AngularFire.
    * @param nameLower Normalized channel name to look up.
+   * @param excludeChannelId Channel id ignored in the comparison.
    */
-  private async queryNameTaken(nameLower: string): Promise<boolean> {
+  private async queryNameTaken(nameLower: string, excludeChannelId: string | null): Promise<boolean> {
     const duplicatesQuery = query(
       collection(this.firestore, 'channels'),
       where('nameLower', '==', nameLower),
-      limit(1),
     );
     const snapshot = await getDocs(duplicatesQuery);
-    return !snapshot.empty;
+    return snapshot.docs.some(docSnapshot => docSnapshot.id !== excludeChannelId);
   }
 
 

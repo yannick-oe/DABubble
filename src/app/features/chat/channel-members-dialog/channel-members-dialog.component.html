@@ -1,0 +1,28 @@
+<app-dialog-shell labelledBy="channel-members-title" size="sm" (closed)="closed.emit()">
+  <header class="members__head">
+    <h2 class="members__title" id="channel-members-title">Mitglieder</h2>
+    <button class="btn btn-icon btn-sm" type="button" aria-label="Dialog schließen" (click)="closed.emit()">
+      <img src="/icons/close.svg" alt="" aria-hidden="true" />
+    </button>
+  </header>
+
+  <ul class="members__list">
+    @for (member of members(); track member.uid) {
+      <li>
+        <button
+          class="members__row"
+          type="button"
+          [attr.aria-label]="'Profil von ' + member.name + ' anzeigen'"
+        >
+          <img class="members__avatar" [src]="member.avatar" alt="" aria-hidden="true" />
+          {{ member.name }}
+        </button>
+      </li>
+    }
+  </ul>
+
+  <button class="members__add" type="button" (click)="addRequested.emit()">
+    <img class="members__add-icon" src="/icons/add-person.svg" alt="" aria-hidden="true" />
+    Mitglieder hinzufügen
+  </button>
+</app-dialog-shell>
