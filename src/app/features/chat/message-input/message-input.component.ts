@@ -1,5 +1,6 @@
 /**
- * @file Message composer card with growing textarea and send handling.
+ * @file Message composer card with growing textarea, emoji insertion and
+ * send handling.
  */
 import {
   ChangeDetectionStrategy,
@@ -12,16 +13,20 @@ import {
   viewChild,
 } from '@angular/core';
 
+import { EmojiPickerComponent } from '../emoji-picker/emoji-picker.component';
+
 const MAX_TEXTAREA_HEIGHT_PX = 200;
 
 /**
  * Presentational composer per the Figma chat frames: outlined card with a
- * growing textarea, inert emoji and mention buttons (modules 4/9) and a
- * send button. Enter sends, Shift+Enter inserts a newline; trimmed-empty
- * input is not sendable. After sending, the field clears and keeps focus.
+ * growing textarea, the emoji picker (inserts at the caret), an inert
+ * mention button (module 9) and a send button. Enter sends, Shift+Enter
+ * inserts a newline; trimmed-empty input is not sendable. After sending,
+ * the field clears and keeps focus.
  */
 @Component({
   selector: 'app-message-input',
+  imports: [EmojiPickerComponent],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,6 +43,8 @@ export class MessageInputComponent {
   protected readonly inputId = `composer-text-${MessageInputComponent.instanceCounter++}`;
 
   protected readonly text = signal('');
+
+  protected readonly pickerOpen = signal(false);
 
   protected readonly canSend = computed(() => this.text().trim().length > 0);
 
@@ -70,6 +77,20 @@ export class MessageInputComponent {
     if (!(event instanceof KeyboardEvent) || event.shiftKey) return;
     event.preventDefault();
     this.submit();
+  }
+
+
+  /**
+   * Inserts a picked emoji at the caret and keeps focus in the field.
+   * @param emoji Picked emoji character.
+   */
+  protected insertEmoji(emoji: string): void {
+    this.pickerOpen.set(false);
+    const element = this.textarea().nativeElement;
+    const start = element.selectionStart ?? element.value.length;
+    element.setRangeText(emoji, start, element.selectionEnd ?? start, 'end');
+    this.text.set(element.value);
+    element.focus();
   }
 
 

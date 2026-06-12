@@ -45,6 +45,17 @@
   gap: v.space('sm');
 }
 
+.composer__picker-wrap {
+  position: relative;
+}
+
+.composer__picker {
+  position: absolute;
+  bottom: calc(100% + #{v.space('xs')});
+  left: 0;
+  z-index: v.$z-dropdown;
+}
+
 .composer__tool,
 .composer__send {
   @include m.flex-center;

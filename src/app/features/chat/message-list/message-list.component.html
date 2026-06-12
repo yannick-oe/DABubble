@@ -10,6 +10,7 @@
           [entry]="message"
           [threadable]="true"
           [threadOpen]="message.id === openThreadId()"
+          [messagePath]="messagePathFor(message)"
           (openThread)="threadRequested.emit(message)"
         ></li>
       }

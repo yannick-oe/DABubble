@@ -12,7 +12,12 @@
   <div class="thread__scroll" #replyScroll>
     @if (origin(); as originMessage) {
       <ul class="thread__origin">
-        <li app-message-item [entry]="originMessage"></li>
+        <li
+          app-message-item
+          [entry]="originMessage"
+          [messagePath]="originPath()"
+          [reactionLimit]="reactionLimit"
+        ></li>
       </ul>
     }
 
@@ -21,8 +26,13 @@
     </div>
 
     <ul class="thread__replies">
-      @for (reply of replies(); track reply.id) {
-        <li app-message-item [entry]="reply"></li>
+      @for (reply of visibleReplies(); track reply.id) {
+        <li
+          app-message-item
+          [entry]="reply"
+          [messagePath]="replyPathFor(reply)"
+          [reactionLimit]="reactionLimit"
+        ></li>
       }
     </ul>
   </div>

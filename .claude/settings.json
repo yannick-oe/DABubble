@@ -41,7 +41,9 @@
       "Bash(node .claude-tmp/verify-m5.mjs)",
       "Bash(node .claude-tmp/debug-clear.mjs)",
       "Bash(node -e ' *)",
-      "Bash(node .claude-tmp/clean-toggle.mjs)"
+      "Bash(node .claude-tmp/clean-toggle.mjs)",
+      "Bash(node .claude-tmp/verify-m6.mjs)",
+      "Bash(node .claude-tmp/clean-m6.mjs)"
     ]
   }
 }

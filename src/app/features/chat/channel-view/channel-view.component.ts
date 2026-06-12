@@ -80,6 +80,10 @@ export class ChannelViewComponent {
     this.threadService.openMessageIdIn(channelMessagesPath(this.channelId())),
   );
 
+  protected readonly messagesCollectionPath = computed(() =>
+    channelMessagesPath(this.channelId()),
+  );
+
 
   /**
    * Focuses the composer on every channel switch.

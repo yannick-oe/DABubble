@@ -13,9 +13,24 @@
 
   <div class="composer__toolbar">
     <div class="composer__tools">
-      <button class="composer__tool" type="button" aria-label="Emoji einfügen">
-        <img src="/icons/smile.svg" alt="" aria-hidden="true" />
-      </button>
+      <span class="composer__picker-wrap">
+        <button
+          class="composer__tool"
+          type="button"
+          aria-label="Emoji einfügen"
+          [attr.aria-expanded]="pickerOpen()"
+          (click)="pickerOpen.set(!pickerOpen()); $event.stopPropagation()"
+        >
+          <img src="/icons/smile.svg" alt="" aria-hidden="true" />
+        </button>
+        @if (pickerOpen()) {
+          <app-emoji-picker
+            class="composer__picker"
+            (picked)="insertEmoji($event)"
+            (closed)="pickerOpen.set(false)"
+          />
+        }
+      </span>
       <button class="composer__tool" type="button" aria-label="Person erwähnen">
         <img src="/icons/at.svg" alt="" aria-hidden="true" />
       </button>

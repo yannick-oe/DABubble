@@ -1,0 +1,34 @@
+@for (entry of visibleEntries(); track entry.emoji) {
+  <button
+    class="chips__chip"
+    type="button"
+    [class.chips__chip--active]="hasReacted(entry)"
+    [attr.aria-label]="'Reaktion ' + entry.emoji + ' umschalten'"
+    (click)="toggled.emit(entry.emoji)"
+  >
+    <span aria-hidden="true">{{ entry.emoji }}</span>
+    <span class="chips__count">{{ entry.uids.length }}</span>
+    <span class="chips__tooltip" role="tooltip">{{ reactorNames(entry) }}</span>
+  </button>
+}
+
+@if (!expanded() && hiddenCount() > 0) {
+  <button class="chips__more" type="button" (click)="expanded.set(true)">
+    +{{ hiddenCount() }} weitere
+  </button>
+}
+
+@if (expanded() && hiddenCount() > 0) {
+  <button class="chips__more" type="button" (click)="expanded.set(false)">
+    Weniger anzeigen
+  </button>
+}
+
+<button
+  class="chips__add"
+  type="button"
+  aria-label="Reaktion hinzufügen"
+  (click)="addRequested.emit(); $event.stopPropagation()"
+>
+  <img src="/icons/add-reaction.svg" alt="" aria-hidden="true" />
+</button>

@@ -18,6 +18,7 @@ import {
 import { Timestamp } from '@angular/fire/firestore';
 
 import { Message } from '../../../models/message.model';
+import { AuthService } from '../../../services/auth.service';
 import { MessageItemComponent } from '../message-item/message-item.component';
 
 const TODAY_LABEL = 'Heute';
@@ -53,9 +54,13 @@ export class MessageListComponent {
 
   readonly openThreadId = input<string | null>(null);
 
+  readonly collectionPath = input<string | null>(null);
+
   readonly threadRequested = output<Message>();
 
   private readonly locale = inject(LOCALE_ID);
+
+  private readonly authService = inject(AuthService);
 
   private readonly scrollContainer = viewChild<ElementRef<HTMLElement>>('scrollContainer');
 
@@ -63,7 +68,22 @@ export class MessageListComponent {
 
   private renderedResetKey: string | null = null;
 
+  private readonly visibleMessages = computed(() => {
+    const uid = this.authService.currentUser()?.uid;
+    return this.messages().filter(message => !uid || !message.hiddenFor?.includes(uid));
+  });
+
   protected readonly groups = computed(() => this.groupMessages());
+
+
+  /**
+   * Builds the Firestore document path of a message for row actions.
+   * @param message Message of the rendered row.
+   */
+  protected messagePathFor(message: Message): string | null {
+    const collectionPath = this.collectionPath();
+    return collectionPath ? `${collectionPath}/${message.id}` : null;
+  }
 
 
   /**
@@ -118,7 +138,7 @@ export class MessageListComponent {
    */
   private groupMessages(): MessageGroup[] {
     const groups: MessageGroup[] = [];
-    for (const message of this.messages()) {
+    for (const message of this.visibleMessages()) {
       const date = resolveDate(message.createdAt);
       const key = formatDate(date, DATE_KEY_FORMAT, this.locale);
       const current = groups[groups.length - 1];

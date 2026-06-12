@@ -11,20 +11,33 @@ import { FieldValue, Timestamp } from '@angular/fire/firestore';
 export type ReactionMap = Record<string, string[]>;
 
 /**
- * Firestore document stored at channels/{channelId}/messages/{messageId} or
- * directMessages/{conversationId}/messages/{messageId}. Thread replies live
- * in the replies subcollection; replyCount and lastReplyAt are denormalized
- * here so thread previews need no reply reads.
+ * Firestore document stored at .../messages/{messageId}/replies/{replyId}.
+ * Also the shared base shape of chat messages.
  */
-export interface MessageDoc {
+export interface ReplyDoc {
   /** Uid of the message author. */
   authorId: string;
-  /** Message text content. */
+  /** Message text content; empty after deletion for everyone. */
   text: string;
   /** Creation time; serverTimestamp() sentinel on write, Timestamp on read. */
   createdAt: Timestamp | FieldValue;
   /** Emoji reactions keyed by emoji character. */
   reactions: ReactionMap;
+  /** Uids that deleted the message only for themselves. */
+  hiddenFor?: string[];
+  /** Deletion time when deleted for everyone; renders as a tombstone. */
+  deletedAt?: Timestamp | FieldValue | null;
+  /** Uid of the user who deleted the message for everyone. */
+  deletedBy?: string;
+}
+
+/**
+ * Firestore document stored at channels/{channelId}/messages/{messageId} or
+ * directMessages/{conversationId}/messages/{messageId}. Thread replies live
+ * in the replies subcollection; replyCount and lastReplyAt are denormalized
+ * here so thread previews need no reply reads.
+ */
+export interface MessageDoc extends ReplyDoc {
   /** Denormalized number of replies in the replies subcollection. */
   replyCount: number;
   /** Denormalized time of the latest reply; null while no replies exist. */
@@ -54,17 +67,3 @@ export interface Reply extends ReplyDoc {
  * the denormalized thread counters, thread replies do not.
  */
 export type ChatEntry = Message | Reply;
-
-/**
- * Firestore document stored at .../messages/{messageId}/replies/{replyId}.
- */
-export interface ReplyDoc {
-  /** Uid of the reply author. */
-  authorId: string;
-  /** Reply text content. */
-  text: string;
-  /** Creation time; serverTimestamp() sentinel on write, Timestamp on read. */
-  createdAt: Timestamp | FieldValue;
-  /** Emoji reactions keyed by emoji character. */
-  reactions: ReactionMap;
-}

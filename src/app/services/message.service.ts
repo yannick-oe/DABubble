@@ -3,16 +3,21 @@
  */
 import { EnvironmentInjector, Injectable, inject, runInInjectionContext } from '@angular/core';
 import {
+  FieldPath,
   Firestore,
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   collectionData,
+  deleteField,
   doc,
   docData,
   increment,
   orderBy,
   query,
   serverTimestamp,
+  updateDoc,
   writeBatch,
 } from '@angular/fire/firestore';
 import { Observable, catchError, of } from 'rxjs';
@@ -126,6 +131,67 @@ export class MessageService {
       });
       return batch.commit();
     });
+  }
+
+
+  /**
+   * Toggles the signed-in user's reaction with the given emoji in one
+   * atomic update; the field is removed when the last reactor leaves.
+   * @param messagePath Firestore path of the message document.
+   * @param emoji Emoji character of the reaction.
+   * @param reactorUids Uids currently reacting with this emoji.
+   */
+  async toggleReaction(messagePath: string, emoji: string, reactorUids: string[]): Promise<void> {
+    const uid = this.authService.requireUid();
+    const reacted = reactorUids.includes(uid);
+    const removesLast = reacted && reactorUids.length === 1;
+    const value = removesLast ? deleteField() : reacted ? arrayRemove(uid) : arrayUnion(uid);
+    await runInInjectionContext(this.injector, () =>
+      updateDoc(doc(this.firestore, messagePath), new FieldPath('reactions', emoji), value),
+    );
+  }
+
+
+  /**
+   * Replaces a message's text after an edit; nothing else changes.
+   * @param messagePath Firestore path of the message document.
+   * @param text Trimmed new message text.
+   */
+  editMessage(messagePath: string, text: string): Promise<void> {
+    return runInInjectionContext(this.injector, () =>
+      updateDoc(doc(this.firestore, messagePath), { text }),
+    );
+  }
+
+
+  /**
+   * Hides a message for the signed-in user only (delete for me); other
+   * participants and the thread counters stay unaffected.
+   * @param messagePath Firestore path of the message document.
+   */
+  hideForMe(messagePath: string): Promise<void> {
+    const uid = this.authService.requireUid();
+    return runInInjectionContext(this.injector, () =>
+      updateDoc(doc(this.firestore, messagePath), { hiddenFor: arrayUnion(uid) }),
+    );
+  }
+
+
+  /**
+   * Deletes a message for everyone: text and reactions are cleared and the
+   * row renders as a tombstone; thread replies stay reachable.
+   * @param messagePath Firestore path of the message document.
+   */
+  deleteForAll(messagePath: string): Promise<void> {
+    const uid = this.authService.requireUid();
+    return runInInjectionContext(this.injector, () =>
+      updateDoc(doc(this.firestore, messagePath), {
+        deletedAt: serverTimestamp(),
+        deletedBy: uid,
+        text: '',
+        reactions: {},
+      }),
+    );
   }
 
 

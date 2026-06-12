@@ -83,6 +83,12 @@ export class DirectMessageViewComponent {
 
   protected readonly openThreadMessageId = computed(() => this.resolveOpenThreadMessageId());
 
+  protected readonly messagesCollectionPath = computed(() =>
+    this.authService.currentUser()
+      ? this.directMessageService.messagesPathWith(this.uid())
+      : null,
+  );
+
 
   /**
    * Focuses the composer on every conversation switch.

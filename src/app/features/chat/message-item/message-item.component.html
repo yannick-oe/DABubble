@@ -5,7 +5,68 @@
     <span class="message__author">{{ authorName() }}</span>
     <span class="message__time">{{ time() }} Uhr</span>
   </div>
-  <p class="message__bubble">{{ entry().text }}</p>
+
+  @if (deleted()) {
+    <p class="message__bubble message__bubble--deleted">Diese Nachricht wurde gelöscht</p>
+  } @else if (editing()) {
+    <div class="message__edit">
+      <label class="sr-only" [for]="editFieldId">Nachricht bearbeiten</label>
+      <textarea
+        #editTextarea
+        [id]="editFieldId"
+        class="message__edit-text"
+        rows="3"
+        [value]="editText()"
+        (input)="onEditInput($event)"
+        (keydown.escape)="cancelEdit()"
+      ></textarea>
+      <div class="message__edit-toolbar">
+        <span class="message__edit-picker-wrap">
+          <button
+            class="message__edit-emoji"
+            type="button"
+            aria-label="Emoji einfügen"
+            (click)="editPickerOpen.set(!editPickerOpen()); $event.stopPropagation()"
+          >
+            <img src="/icons/smile.svg" alt="" aria-hidden="true" />
+          </button>
+          @if (editPickerOpen()) {
+            <app-emoji-picker
+              class="message__edit-picker"
+              (picked)="onEditPicked($event)"
+              (closed)="editPickerOpen.set(false)"
+            />
+          }
+        </span>
+        <div class="message__edit-actions">
+          <button class="btn btn-secondary btn-sm" type="button" (click)="cancelEdit()">
+            Abbrechen
+          </button>
+          <button
+            class="btn btn-primary btn-sm"
+            type="button"
+            [disabled]="!canSaveEdit()"
+            (click)="saveEdit()"
+          >
+            Speichern
+          </button>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <p class="message__bubble">{{ entry().text }}</p>
+  }
+
+  @if (!deleted() && hasReactions()) {
+    <app-reaction-chips
+      class="message__chips"
+      [reactions]="entry().reactions"
+      [limit]="reactionLimit()"
+      (toggled)="react($event)"
+      (addRequested)="reactionPickerOpen.set(true)"
+    />
+  }
+
   @if (threadable() && replyCount() > 0) {
     <div class="message__thread">
       <button
@@ -21,14 +82,27 @@
   }
 </div>
 
-@if (threadable()) {
-  <button
-    class="message__thread-start"
-    type="button"
-    aria-label="Thread starten"
-    [attr.aria-expanded]="threadOpen()"
-    (click)="openThread.emit()"
-  >
-    <img src="/icons/comment.svg" alt="" aria-hidden="true" />
-  </button>
+@if (!deleted() && !editing() && messagePath()) {
+  <div class="message__actions-anchor">
+    <app-message-actions
+      [own]="own()"
+      [threadable]="threadable()"
+      [threadOpen]="threadOpen()"
+      [canEdit]="canEditNow()"
+      (reacted)="react($event)"
+      (pickerRequested)="reactionPickerOpen.set(true)"
+      (threadToggled)="openThread.emit()"
+      (editRequested)="startEdit()"
+      (deleteForMe)="onDeleteForMe()"
+      (deleteForAll)="onDeleteForAll()"
+    />
+  </div>
+}
+
+@if (reactionPickerOpen()) {
+  <app-emoji-picker
+    class="message__picker"
+    (picked)="onReactionPicked($event)"
+    (closed)="reactionPickerOpen.set(false)"
+  />
 }

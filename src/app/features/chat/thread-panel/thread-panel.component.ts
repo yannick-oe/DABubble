@@ -14,6 +14,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { of, switchMap } from 'rxjs';
 
 import { Message, Reply } from '../../../models/message.model';
+import { AuthService } from '../../../services/auth.service';
 import { MessageService } from '../../../services/message.service';
 import { ThreadService } from '../../../services/thread.service';
 import { ToastService } from '../../../services/toast.service';
@@ -22,6 +23,7 @@ import { MessageItemComponent } from '../message-item/message-item.component';
 
 const SEND_ERROR = 'Die Antwort konnte nicht gesendet werden.';
 const COMPOSER_PLACEHOLDER = 'Antworten...';
+const THREAD_REACTION_LIMIT = 7;
 
 /**
  * Right-hand thread panel per the Figma frame: header with the context
@@ -41,6 +43,8 @@ export class ThreadPanelComponent {
 
   private readonly messageService = inject(MessageService);
 
+  private readonly authService = inject(AuthService);
+
   private readonly toastService = inject(ToastService);
 
   private readonly composer = viewChild(MessageInputComponent);
@@ -51,8 +55,14 @@ export class ThreadPanelComponent {
 
   protected readonly composerPlaceholder = COMPOSER_PLACEHOLDER;
 
+  protected readonly reactionLimit = THREAD_REACTION_LIMIT;
+
   protected readonly contextLabel = computed(
     () => this.threadService.thread()?.contextLabel ?? '',
+  );
+
+  protected readonly originPath = computed(
+    () => this.threadService.thread()?.messagePath ?? null,
   );
 
   protected readonly origin = toSignal(
@@ -73,9 +83,26 @@ export class ThreadPanelComponent {
     { initialValue: [] as Reply[] },
   );
 
+  protected readonly visibleReplies = computed(() => {
+    const uid = this.authService.currentUser()?.uid;
+    return this.replies().filter(reply => !uid || !reply.hiddenFor?.includes(uid));
+  });
+
   protected readonly replyCountLabel = computed(() =>
-    this.replies().length === 1 ? '1 Antwort' : `${this.replies().length} Antworten`,
+    this.visibleReplies().length === 1
+      ? '1 Antwort'
+      : `${this.visibleReplies().length} Antworten`,
   );
+
+
+  /**
+   * Builds the Firestore document path of a reply for row actions.
+   * @param reply Reply of the rendered row.
+   */
+  protected replyPathFor(reply: Reply): string | null {
+    const originPath = this.originPath();
+    return originPath ? `${originPath}/replies/${reply.id}` : null;
+  }
 
 
   /**

@@ -69,6 +69,89 @@
     background-color: v.color('primary-hover');
     color: v.color('white');
   }
+
+  &--deleted,
+  :host(.message--own) &--deleted {
+    background-color: v.color('bg');
+    color: v.color('text-gray');
+    font-style: italic;
+  }
+}
+
+.message__edit {
+  display: flex;
+  flex-direction: column;
+  gap: v.space('sm');
+  width: 100%;
+  padding: v.space('md') v.space('lg');
+  border: 1px solid v.color('lines');
+  border-radius: v.$radius-xl;
+  background-color: v.color('white');
+}
+
+.message__edit-text {
+  width: 100%;
+  border: none;
+  resize: vertical;
+  background: none;
+  font-family: v.$font-base;
+  font-size: v.font-size('body');
+  line-height: v.$line-height-base;
+  color: v.color('black');
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.message__edit-toolbar {
+  @include m.flex-between;
+
+  gap: v.space('md');
+}
+
+.message__edit-picker-wrap {
+  position: relative;
+}
+
+.message__edit-emoji {
+  @include m.flex-center;
+
+  width: v.$btn-height-sm;
+  height: v.$btn-height-sm;
+  border: none;
+  border-radius: v.$radius-round;
+  background: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.color('bg');
+  }
+
+  &:focus-visible {
+    @include m.focus-ring;
+  }
+
+  img {
+    width: v.$icon-md;
+    height: v.$icon-md;
+  }
+}
+
+.message__edit-picker {
+  position: absolute;
+  bottom: calc(100% + #{v.space('xs')});
+  left: 0;
+  z-index: v.$z-dropdown;
+}
+
+.message__edit-actions {
+  display: flex;
+  gap: v.space('md');
+}
+
+.message__chips {
+  max-width: 100%;
 }
 
 .message__thread {
@@ -99,38 +182,17 @@
   color: v.color('text-gray');
 }
 
-.message__thread-start {
-  @include m.flex-center;
-
+.message__actions-anchor {
   position: absolute;
-  top: 0;
+  top: calc(-1 * #{v.space('sm')});
   right: v.space('lg');
-  width: v.$btn-height-sm;
-  height: v.$btn-height-sm;
-  border: none;
-  border-radius: v.$radius-round;
-  background-color: v.color('white');
-  box-shadow: v.$shadow-sm;
-  cursor: pointer;
+  z-index: v.$z-raised;
   opacity: 0;
-  transition: opacity v.$transition-fast, background-color v.$transition-fast;
+  transition: opacity v.$transition-fast;
 
   :host(:hover) &,
-  &:focus-visible {
+  &:focus-within {
     opacity: 1;
-  }
-
-  &:hover {
-    background-color: v.color('bg');
-  }
-
-  &:focus-visible {
-    @include m.focus-ring;
-  }
-
-  img {
-    width: v.$icon-md;
-    height: v.$icon-md;
   }
 
   :host(.message--own) & {
@@ -139,8 +201,20 @@
   }
 }
 
+.message__picker {
+  position: absolute;
+  top: v.space('xl');
+  left: calc(#{v.$avatar-message} + #{v.space('lg')});
+  z-index: v.$z-dropdown;
+
+  :host(.message--own) & {
+    left: auto;
+    right: calc(#{v.$avatar-message} + #{v.space('lg')});
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .message__thread-start {
+  .message__actions-anchor {
     transition: none;
   }
 }
