@@ -80,6 +80,7 @@
   border-radius: 0 v.$radius-xl v.$radius-xl v.$radius-xl;
   background-color: v.color('bg');
   font-size: v.font-size('body');
+  font-family: v.$font-heading;
   line-height: v.$line-height-base;
   color: v.color('black');
   white-space: pre-wrap;
@@ -210,7 +211,8 @@
 
 .message__actions-anchor {
   position: absolute;
-  top: calc(-1 * #{v.space('sm')});
+  top: 0;
+  transform: translateY(-50%);
   right: v.space('lg');
   z-index: v.$z-raised;
   opacity: 0;

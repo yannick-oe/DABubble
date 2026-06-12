@@ -33,6 +33,7 @@ type MenuState = 'closed' | 'menu' | 'confirm';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.actions--open]': "menuState() !== 'closed'",
+    '[class.actions--own]': 'own()',
     '(document:click)': 'onDocumentClick($event)',
     '(document:keydown.escape)': 'closeMenu()',
   },

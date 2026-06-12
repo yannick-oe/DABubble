@@ -59,6 +59,12 @@
   background-color: v.color('white');
   box-shadow: v.$shadow-lg;
   white-space: nowrap;
+
+  :host(.actions--own) & {
+    right: auto;
+    left: 0;
+    border-radius: 0 v.$radius-lg v.$radius-lg v.$radius-lg;
+  }
 }
 
 .actions__menu-item {
