@@ -144,6 +144,26 @@ export class MessageItemComponent {
     Object.values(this.entry().reactions).some(uids => uids.length > 0),
   );
 
+  protected readonly parsedText = computed(() => {
+    const text = this.entry().text;
+    const users = this.userService.users();
+    const names = users.map(u => u.name).filter(n => n.trim().length > 0);
+
+    if (names.length === 0) {
+      return [{ text, isMention: false }];
+    }
+
+    const escapeRegExp = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const sortedNames = names.sort((a, b) => b.length - a.length);
+    const patternStr = sortedNames.map(escapeRegExp).join('|');
+    const regex = new RegExp(`(@(?:${patternStr}))`, 'g');
+
+    return text.split(regex).filter(p => p.length > 0).map(part => ({
+      text: part,
+      isMention: part.startsWith('@') && sortedNames.includes(part.substring(1))
+    }));
+  });
+
 
   /**
    * Arms the long-press timer; touch devices have no hover, so a held

@@ -23,16 +23,55 @@
   z-index: v.$z-dropdown;
 }
 
+.composer__input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.composer__backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+
+  font-family: v.$font-base;
+  font-size: v.font-size('body');
+  line-height: v.$line-height-base;
+  color: v.color('black');
+
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.composer__mention {
+  // Use text-shadow instead of font-weight to simulate bolding.
+  // Changing font-weight changes letter width, which desyncs the hidden textarea caret!
+  text-shadow: 0.4px 0 0 v.color('primary'), -0.4px 0 0 v.color('primary');
+  color: v.color('primary');
+}
+
 .composer__text {
+  position: relative;
+  z-index: 1;
   width: 100%;
   border: none;
   resize: none;
-  background: none;
+  background: transparent;
   font-family: v.$font-base;
   font-size: v.font-size('body');
-  color: v.color('black');
+  color: transparent;
+  caret-color: v.color('black');
   line-height: v.$line-height-base;
   overflow-y: auto;
+  overflow-wrap: anywhere;
   @include m.scrollbar-thin;
 
   &::placeholder {

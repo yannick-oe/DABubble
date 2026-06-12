@@ -62,6 +62,8 @@ export class MessageInputComponent {
 
   private readonly textarea = viewChild.required<ElementRef<HTMLTextAreaElement>>('textarea');
 
+  private readonly backdrop = viewChild<ElementRef<HTMLDivElement>>('backdrop');
+
   protected readonly inputId = `composer-text-${MessageInputComponent.instanceCounter++}`;
 
   protected readonly suggestionIdPrefix = `${this.inputId}-suggestion`;
@@ -80,6 +82,25 @@ export class MessageInputComponent {
 
   protected readonly suggestions = computed(() => this.buildSuggestions());
 
+  protected readonly parsedText = computed(() => {
+    const currentText = this.text();
+    const users = this.userService.users();
+    const names = users.map(u => u.name).filter(n => n.trim().length > 0);
+
+    if (names.length === 0) {
+      return [{ text: currentText, isMention: false }];
+    }
+
+    const escapeRegExp = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const sortedNames = names.sort((a, b) => b.length - a.length);
+    const patternStr = sortedNames.map(escapeRegExp).join('|');
+    const regex = new RegExp(`(@(?:${patternStr}))`, 'g');
+
+    return currentText.split(regex).filter(p => p.length > 0).map(part => ({
+      text: part,
+      isMention: part.startsWith('@') && sortedNames.includes(part.substring(1))
+    }));
+  });
 
   /**
    * Focuses the textarea; called by the parent on channel switches.
@@ -100,6 +121,19 @@ export class MessageInputComponent {
     element.style.height = 'auto';
     element.style.height = `${Math.min(element.scrollHeight, MAX_TEXTAREA_HEIGHT_PX)}px`;
     this.syncMention(element);
+  }
+
+
+  /**
+   * Syncs the scroll position of the backdrop with the textarea.
+   * @param event Scroll event of the textarea.
+   */
+  protected onScroll(event: Event): void {
+    const textarea = event.target as HTMLTextAreaElement;
+    const backdrop = this.backdrop()?.nativeElement;
+    if (backdrop) {
+      backdrop.scrollTop = textarea.scrollTop;
+    }
   }
 
 

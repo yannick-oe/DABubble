@@ -105,6 +105,15 @@
   }
 }
 
+.message__mention {
+  font-weight: v.$font-weight-semibold;
+  color: v.color('primary');
+
+  :host(.message--own) & {
+    color: inherit;
+  }
+}
+
 .message__edit {
   display: flex;
   flex-direction: column;
