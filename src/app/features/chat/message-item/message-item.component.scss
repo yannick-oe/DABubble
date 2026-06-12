@@ -6,6 +6,15 @@
   display: flex;
   align-items: flex-start;
   gap: v.space('lg');
+  margin-left: calc(-1 * #{v.space('xl-xxl')});
+  margin-right: calc(-1 * #{v.space('xl-xxl')});
+  padding: v.space('sm') v.space('xl-xxl');
+  transition: background-color v.$transition-fast;
+}
+
+:host(:hover) {
+  cursor: pointer;
+  background-color: v.color('bg');
 }
 
 :host(.message--own) {
@@ -75,6 +84,11 @@
   color: v.color('black');
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+  transition: background-color v.$transition-fast;
+
+  :host(:hover):not(.message--own) & {
+    background-color: v.color('white');
+  }
 
   :host(.message--own) & {
     border-radius: v.$radius-xl 0 v.$radius-xl v.$radius-xl;
@@ -235,6 +249,9 @@
 @include m.respond-md {
   :host {
     gap: v.space('md');
+    margin-left: calc(-1 * #{v.space('md')});
+    margin-right: calc(-1 * #{v.space('md')});
+    padding: v.space('sm') v.space('md');
   }
 
   .message__avatar {

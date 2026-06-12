@@ -11,7 +11,7 @@
   gap: v.space('xs');
   padding: v.space('xs') v.space('sm');
   border: 1px solid v.color('lines');
-  border-radius: v.$radius-pill;
+  border-radius: v.$radius-pill v.$radius-pill 0 v.$radius-pill;
   background-color: v.color('white');
   box-shadow: v.$shadow-sm;
 }
