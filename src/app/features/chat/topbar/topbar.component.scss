@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   gap: v.space('lg');
-  padding: v.space('md') v.space('lg');
+  padding: v.space('md') v.space('lg') v.space('md') calc(v.space('lg') * 2);
 }
 
 .topbar__brand {
@@ -13,6 +13,7 @@
   align-items: center;
   gap: v.space('md');
   flex-shrink: 0;
+  width: v.$sidebar-width;
 }
 
 .topbar__logo {
@@ -26,6 +27,9 @@
 .topbar__profile {
   position: relative;
   flex-shrink: 0;
+  width: v.$thread-panel-width;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .topbar__user {
