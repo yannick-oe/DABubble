@@ -80,6 +80,15 @@
     color: v.color('primary');
   }
 
+  &--profile:hover img {
+    content: url('/icons/account-circle-hover.svg');
+    transform: scale(1.03);
+  }
+
+  &--logout:hover img {
+    content: url('/icons/logout-hover.svg');
+  }
+
   img {
     width: v.$icon-md;
     height: v.$icon-md;
@@ -87,6 +96,7 @@
 }
 
 .topbar__user-name {
+  font-family: v.$font-heading;
   font-size: v.font-size('h3');
   font-weight: v.$font-weight-bold;
   color: v.color('black');
@@ -107,6 +117,8 @@
 
 .topbar__status {
   @include m.status-dot;
+  width: 16px;
+  height: 16px;
 
   position: absolute;
   right: 0;

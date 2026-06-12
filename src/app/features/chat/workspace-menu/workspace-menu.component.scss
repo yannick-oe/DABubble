@@ -24,6 +24,7 @@
 
 .workspace__title {
   flex: 1;
+  font-family: v.$font-heading;
   font-size: v.font-size('h4');
   font-weight: v.$font-weight-bold;
   color: v.color('black');
@@ -77,6 +78,7 @@
 
 .workspace__section-title {
   flex: 1;
+  font-family: v.$font-heading;
   text-align: left;
 }
 
@@ -110,6 +112,7 @@
   background: none;
   border-radius: v.$radius-pill;
   cursor: pointer;
+  font-family: v.$font-heading;
   font-size: v.font-size('body');
   color: v.color('black');
   text-align: left;
@@ -146,6 +149,8 @@
 
 .workspace__status {
   @include m.status-dot;
+  width: 14px;
+  height: 14px;
 
   position: absolute;
   right: 0;

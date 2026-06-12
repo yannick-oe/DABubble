@@ -31,6 +31,7 @@
   border-radius: v.$radius-pill;
   background: none;
   cursor: pointer;
+  font-family: v.$font-heading;
   font-size: v.font-size('h5');
   font-weight: v.$font-weight-bold;
   color: v.color('black');

@@ -64,11 +64,11 @@
   <app-dialog-shell [anchor]="menuAnchor()" size="menu" labelledBy="topbar-menu-title" (closed)="close()">
     <h2 class="sr-only" id="topbar-menu-title">Profilmenü</h2>
     <div class="topbar__menu" role="menu">
-      <button class="topbar__menu-item" type="button" role="menuitem" (click)="openProfile()">
+      <button class="topbar__menu-item topbar__menu-item--profile" type="button" role="menuitem" (click)="openProfile()">
         <img src="/icons/account-circle.svg" alt="" aria-hidden="true" />
         Profil
       </button>
-      <button class="topbar__menu-item" type="button" role="menuitem" (click)="logout()">
+      <button class="topbar__menu-item topbar__menu-item--logout" type="button" role="menuitem" (click)="logout()">
         <img src="/icons/logout.svg" alt="" aria-hidden="true" />
         Log out
       </button>
