@@ -1,31 +1,33 @@
 /**
- * @file App topbar with brand, static search field, the signed-in user and
- * an interim profile menu for signing out.
+ * @file App topbar with brand, static search field, the signed-in user
+ * and the profile menu.
  */
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  computed,
-  inject,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../services/auth.service';
 import { DEFAULT_AVATAR_PATH } from '../../../services/registration.service';
+import { UserService } from '../../../services/user.service';
+import { ProfileDialogComponent } from '../../profile/profile-dialog/profile-dialog.component';
+import {
+  DialogAnchor,
+  DialogShellComponent,
+  anchorBelow,
+} from '../../../shared/dialog-shell/dialog-shell.component';
 
 const GUEST_NAME = 'Gast';
 
+type TopbarState = 'closed' | 'menu' | 'profile';
+
 /**
  * Top bar of the app shell. Shows the brand, a static search input (search
- * logic follows in a later module) and the current user's identity. The
- * profile area opens a minimal interim dropdown with a logout entry.
- * TODO: replaced by the full profile menu module.
+ * logic follows in a later module) and the signed-in user's live identity
+ * resolved from the users collection. The profile area opens the anchored
+ * profile menu with the profile dialog and the logout action.
  */
 @Component({
   selector: 'app-topbar',
+  imports: [DialogShellComponent, ProfileDialogComponent],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,14 +35,25 @@ const GUEST_NAME = 'Gast';
 export class TopbarComponent {
   private readonly authService = inject(AuthService);
 
+  private readonly userService = inject(UserService);
+
   private readonly router = inject(Router);
 
-  private readonly profileTrigger = viewChild<ElementRef<HTMLButtonElement>>('profileTrigger');
+  protected readonly state = signal<TopbarState>('closed');
 
-  protected readonly menuOpen = signal(false);
+  protected readonly menuAnchor = signal<DialogAnchor | null>(null);
+
+  protected readonly selfUid = computed(() => this.authService.currentUser()?.uid ?? null);
+
+  private readonly userDoc = computed(() =>
+    this.userService.users().find(user => user.uid === this.selfUid()),
+  );
 
   protected readonly userName = computed(
-    () => this.authService.currentUser()?.displayName ?? GUEST_NAME,
+    () =>
+      this.userDoc()?.name ??
+      this.authService.currentUser()?.displayName ??
+      GUEST_NAME,
   );
 
   protected readonly avatarSrc = computed(() => this.resolveAvatar());
@@ -49,20 +62,30 @@ export class TopbarComponent {
 
 
   /**
-   * Toggles the interim profile menu.
+   * Opens the profile menu anchored below the trigger, right-aligned.
+   * @param event Click event of the profile trigger.
    */
-  protected toggleMenu(): void {
-    this.menuOpen.update(open => !open);
+  protected openMenu(event: Event): void {
+    const trigger = event.currentTarget;
+    if (!(trigger instanceof HTMLElement)) return;
+    this.menuAnchor.set(anchorBelow(trigger, 'right'));
+    this.state.set('menu');
   }
 
 
   /**
-   * Closes the menu and returns focus to the profile trigger.
+   * Closes any open menu or dialog.
    */
-  protected closeMenu(): void {
-    if (!this.menuOpen()) return;
-    this.menuOpen.set(false);
-    this.profileTrigger()?.nativeElement.focus();
+  protected close(): void {
+    this.state.set('closed');
+  }
+
+
+  /**
+   * Switches from the menu to the own-profile dialog.
+   */
+  protected openProfile(): void {
+    this.state.set('profile');
   }
 
 
@@ -70,19 +93,20 @@ export class TopbarComponent {
    * Signs out and returns to the login page.
    */
   protected async logout(): Promise<void> {
-    this.menuOpen.set(false);
+    this.state.set('closed');
     await this.authService.logout();
     this.router.navigate(['/auth/login']);
   }
 
 
   /**
-   * Resolves the avatar source; external URLs fall back to the placeholder
-   * because the avatar system is local-path based.
+   * Resolves the avatar from the live user document; the auth profile is
+   * only a fallback while the document is loading.
    */
   private resolveAvatar(): string {
-    const path = this.authService.currentUser()?.photoURL ?? DEFAULT_AVATAR_PATH;
-    return path.startsWith('http') ? `/${DEFAULT_AVATAR_PATH}` : `/${path}`;
+    const path = this.userDoc()?.avatarPath ?? this.authService.currentUser()?.photoURL;
+    if (!path || path.startsWith('http')) return `/${DEFAULT_AVATAR_PATH}`;
+    return `/${path}`;
   }
 
 

@@ -63,15 +63,9 @@
 }
 
 .topbar__menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  z-index: v.$z-dropdown;
-  margin-top: v.space('sm');
-  padding: v.space('md');
-  border-radius: v.$radius-lg 0 v.$radius-lg v.$radius-lg;
-  background-color: v.color('white');
-  box-shadow: v.$shadow-lg;
+  display: flex;
+  flex-direction: column;
+  gap: v.space('xs');
 }
 
 .topbar__menu-item {

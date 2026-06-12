@@ -72,6 +72,7 @@
         [anchor]="dialogAnchor()"
         (closed)="dialog.set(null)"
         (addRequested)="dialog.set('add')"
+        (memberSelected)="openProfile($event)"
       />
     }
     @case ('add') {
@@ -82,4 +83,8 @@
       />
     }
   }
+}
+
+@if (profileUid(); as uid) {
+  <app-profile-dialog [uid]="uid" (closed)="profileUid.set(null)" />
 }

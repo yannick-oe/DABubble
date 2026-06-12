@@ -17,6 +17,7 @@ import { FirebaseError } from 'firebase/app';
 import { AuthService } from '../../../services/auth.service';
 import { RegistrationService } from '../../../services/registration.service';
 import { ToastService } from '../../../services/toast.service';
+import { AVATAR_OPTIONS } from '../../../shared/avatar-options';
 
 const SUCCESS_REDIRECT_DELAY_MS = 1500;
 const SUCCESS_TOAST_MESSAGE = 'Konto erfolgreich erstellt!';
@@ -24,21 +25,6 @@ const SUCCESS_TOAST_MESSAGE = 'Konto erfolgreich erstellt!';
 const EMAIL_IN_USE_MESSAGE = 'Diese E-Mail-Adresse wird bereits verwendet';
 const WEAK_PASSWORD_MESSAGE = 'Dein Passwort muss mindestens 6 Zeichen lang sein';
 const GENERAL_ERROR_MESSAGE = 'Das hat leider nicht geklappt. Bitte versuche es später erneut.';
-
-/** Selectable avatar asset with a human-readable label. */
-interface AvatarOption {
-  readonly path: string;
-  readonly label: string;
-}
-
-const AVATAR_OPTIONS: readonly AvatarOption[] = [
-  { path: 'avatars/Elias-Neumann.png', label: 'Elias Neumann' },
-  { path: 'avatars/Elise-Roth.png', label: 'Elise Roth' },
-  { path: 'avatars/Frederik-Beck.png', label: 'Frederik Beck' },
-  { path: 'avatars/Noah-Braun.png', label: 'Noah Braun' },
-  { path: 'avatars/Sofia-Müller.png', label: 'Sofia Müller' },
-  { path: 'avatars/Steffen-Hoffmann.png', label: 'Steffen Hoffmann' },
-];
 
 /**
  * Second step of the registration flow. Lets the user pick one of the

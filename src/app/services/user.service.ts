@@ -3,7 +3,15 @@
  */
 import { EnvironmentInjector, Injectable, inject, runInInjectionContext } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { Firestore, collection, collectionData, orderBy, query } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  orderBy,
+  query,
+  updateDoc,
+} from '@angular/fire/firestore';
 import { Observable, catchError, of, switchMap } from 'rxjs';
 
 import { UserDoc } from '../models/user.model';
@@ -27,6 +35,20 @@ export class UserService {
   private readonly injector = inject(EnvironmentInjector);
 
   readonly users = toSignal(this.streamUsers(), { initialValue: [] as UserDoc[] });
+
+
+  /**
+   * Updates the signed-in user's profile; the change propagates to every
+   * surface live because all rendering resolves users via the stream.
+   * @param name Trimmed new display name.
+   * @param avatarPath Public asset path of the selected avatar.
+   */
+  updateProfile(name: string, avatarPath: string): Promise<void> {
+    const uid = this.authService.requireUid();
+    return runInInjectionContext(this.injector, () =>
+      updateDoc(doc(this.firestore, `users/${uid}`), { name: name.trim(), avatarPath }),
+    );
+  }
 
 
   /**

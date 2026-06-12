@@ -1,4 +1,4 @@
-<header class="topbar" (keydown.escape)="closeMenu()">
+<header class="topbar">
   <div class="topbar__brand">
     <img class="topbar__logo" src="/logos/logo-text.svg" alt="DABubble" />
   </div>
@@ -16,13 +16,11 @@
 
   <div class="topbar__profile">
     <button
-      #profileTrigger
       class="topbar__user"
       type="button"
       aria-haspopup="menu"
-      aria-controls="topbar-profile-menu"
-      [attr.aria-expanded]="menuOpen()"
-      (click)="toggleMenu()"
+      [attr.aria-expanded]="state() === 'menu'"
+      (click)="openMenu($event)"
     >
       <span class="topbar__user-name">{{ userName() }}</span>
       <span class="topbar__avatar-wrap">
@@ -36,14 +34,25 @@
       </span>
       <img class="topbar__chevron" src="/icons/arrow-drop-down.svg" alt="" aria-hidden="true" />
     </button>
-
-    @if (menuOpen()) {
-      <div class="topbar__menu" id="topbar-profile-menu" role="menu">
-        <button class="topbar__menu-item" type="button" role="menuitem" (click)="logout()">
-          <img src="/icons/logout.svg" alt="" aria-hidden="true" />
-          Log out
-        </button>
-      </div>
-    }
   </div>
 </header>
+
+@if (state() === 'menu') {
+  <app-dialog-shell [anchor]="menuAnchor()" size="menu" labelledBy="topbar-menu-title" (closed)="close()">
+    <h2 class="sr-only" id="topbar-menu-title">Profilmenü</h2>
+    <div class="topbar__menu" role="menu">
+      <button class="topbar__menu-item" type="button" role="menuitem" (click)="openProfile()">
+        <img src="/icons/account-circle.svg" alt="" aria-hidden="true" />
+        Profil
+      </button>
+      <button class="topbar__menu-item" type="button" role="menuitem" (click)="logout()">
+        <img src="/icons/logout.svg" alt="" aria-hidden="true" />
+        Log out
+      </button>
+    </div>
+  </app-dialog-shell>
+}
+
+@if (state() === 'profile' && selfUid(); as uid) {
+  <app-profile-dialog [uid]="uid" (closed)="close()" />
+}

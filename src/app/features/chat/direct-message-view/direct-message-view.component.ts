@@ -9,6 +9,7 @@ import {
   effect,
   inject,
   input,
+  signal,
   viewChild,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -21,6 +22,7 @@ import { DEFAULT_AVATAR_PATH } from '../../../services/registration.service';
 import { ThreadService } from '../../../services/thread.service';
 import { ToastService } from '../../../services/toast.service';
 import { UserService } from '../../../services/user.service';
+import { ProfileDialogComponent } from '../../profile/profile-dialog/profile-dialog.component';
 import { MessageInputComponent } from '../message-input/message-input.component';
 import { MessageListComponent } from '../message-list/message-list.component';
 
@@ -36,7 +38,7 @@ const SELF_SUFFIX = ' (Du)';
  */
 @Component({
   selector: 'app-direct-message-view',
-  imports: [MessageInputComponent, MessageListComponent],
+  imports: [MessageInputComponent, MessageListComponent, ProfileDialogComponent],
   templateUrl: './direct-message-view.component.html',
   styleUrl: './direct-message-view.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,6 +59,8 @@ export class DirectMessageViewComponent {
   private readonly composer = viewChild(MessageInputComponent);
 
   private focusedUid: string | null = null;
+
+  protected readonly profileOpen = signal(false);
 
   protected readonly messages = toSignal(
     toObservable(this.uid).pipe(

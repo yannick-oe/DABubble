@@ -24,7 +24,8 @@ import { DEFAULT_AVATAR_PATH } from '../../../services/registration.service';
 import { ThreadService } from '../../../services/thread.service';
 import { ToastService } from '../../../services/toast.service';
 import { UserService } from '../../../services/user.service';
-import { DialogAnchor } from '../../../shared/dialog-shell/dialog-shell.component';
+import { ProfileDialogComponent } from '../../profile/profile-dialog/profile-dialog.component';
+import { DialogAnchor, anchorBelow } from '../../../shared/dialog-shell/dialog-shell.component';
 import { ChannelAddMembersDialogComponent } from '../channel-add-members-dialog/channel-add-members-dialog.component';
 import { ChannelMembersDialogComponent } from '../channel-members-dialog/channel-members-dialog.component';
 import { ChannelSettingsDialogComponent } from '../channel-settings-dialog/channel-settings-dialog.component';
@@ -33,8 +34,6 @@ import { MessageListComponent } from '../message-list/message-list.component';
 
 const SEND_ERROR = 'Die Nachricht konnte nicht gesendet werden.';
 const HEAD_AVATAR_LIMIT = 3;
-const ANCHOR_GAP_PX = 8;
-const ANCHOR_MIN_VIEWPORT_PX = 768;
 
 type ChannelDialog = 'settings' | 'members' | 'add';
 
@@ -51,6 +50,7 @@ type ChannelDialog = 'settings' | 'members' | 'add';
     ChannelSettingsDialogComponent,
     MessageInputComponent,
     MessageListComponent,
+    ProfileDialogComponent,
   ],
   templateUrl: './channel-view.component.html',
   styleUrl: './channel-view.component.scss',
@@ -78,6 +78,18 @@ export class ChannelViewComponent {
   protected readonly dialog = signal<ChannelDialog | null>(null);
 
   protected readonly dialogAnchor = signal<DialogAnchor | null>(null);
+
+  protected readonly profileUid = signal<string | null>(null);
+
+
+  /**
+   * Closes the members dialog and opens the member's profile.
+   * @param uid Uid of the selected member.
+   */
+  protected openProfile(uid: string): void {
+    this.dialog.set(null);
+    this.profileUid.set(uid);
+  }
 
   protected readonly messages = toSignal(
     toObservable(this.channelId).pipe(
@@ -161,11 +173,8 @@ export class ChannelViewComponent {
   private anchorFor(kind: ChannelDialog, event: Event): DialogAnchor | null {
     const trigger = event.currentTarget;
     if (!(trigger instanceof HTMLElement)) return null;
-    if (window.innerWidth <= ANCHOR_MIN_VIEWPORT_PX) return null;
-    const top = trigger.getBoundingClientRect().bottom + ANCHOR_GAP_PX;
-    if (kind === 'settings') return { top, left: trigger.getBoundingClientRect().left };
-    const hostRight = this.host.nativeElement.getBoundingClientRect().right;
-    return { top, right: window.innerWidth - hostRight };
+    if (kind === 'settings') return anchorBelow(trigger, 'left');
+    return anchorBelow(trigger, 'right', this.host.nativeElement);
   }
 
 

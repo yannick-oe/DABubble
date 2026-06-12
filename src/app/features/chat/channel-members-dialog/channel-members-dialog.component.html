@@ -1,4 +1,4 @@
-<app-dialog-shell [anchor]="anchor()" labelledBy="channel-members-title" size="sm" (closed)="closed.emit()">
+<app-dialog-shell [anchor]="anchor()" labelledBy="channel-members-title" size="members" (closed)="closed.emit()">
   <header class="members__head">
     <h2 class="members__title" id="channel-members-title">Mitglieder</h2>
     <button class="btn btn-icon btn-sm" type="button" aria-label="Dialog schließen" (click)="closed.emit()">
@@ -13,6 +13,7 @@
           class="members__row"
           type="button"
           [attr.aria-label]="'Profil von ' + member.name + ' anzeigen'"
+          (click)="memberSelected.emit(member.uid)"
         >
           <img class="members__avatar" [src]="member.avatar" alt="" aria-hidden="true" />
           {{ member.name }}

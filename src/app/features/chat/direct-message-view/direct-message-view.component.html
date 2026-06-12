@@ -1,6 +1,12 @@
 <section class="dm">
   <header class="dm__head">
-    <button class="dm__partner" type="button" aria-label="Profil anzeigen">
+    <button
+      class="dm__partner"
+      type="button"
+      aria-label="Profil anzeigen"
+      [attr.aria-expanded]="profileOpen()"
+      (click)="profileOpen.set(true)"
+    >
       <span class="dm__avatar-wrap">
         <img class="dm__avatar" [src]="partnerAvatar()" alt="" aria-hidden="true" />
         <span class="dm__status" [class.dm__status--offline]="!isSelf()" aria-hidden="true"></span>
@@ -42,3 +48,7 @@
     <app-message-input [placeholder]="composerPlaceholder()" (send)="sendMessage($event)" />
   </div>
 </section>
+
+@if (profileOpen()) {
+  <app-profile-dialog [uid]="uid()" (closed)="profileOpen.set(false)" />
+}

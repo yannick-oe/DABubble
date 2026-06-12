@@ -16,7 +16,7 @@
   display: flex;
   flex-direction: column;
   gap: v.space('lg');
-  width: min(v.$dialog-width, 100%);
+  width: min(v.dialog-width('default'), 100%);
   max-height: calc(100dvh - #{v.space('xl')});
   padding: v.space('xl-xxl');
   border-radius: v.$radius-xl;
@@ -25,9 +25,24 @@
   overflow-y: auto;
   @include m.scrollbar-thin;
 
-  &--sm {
-    width: min(v.$dialog-width-sm, 100%);
+  &--members {
+    width: min(v.dialog-width('members'), 100%);
     padding: v.space('xl');
+  }
+
+  &--add-members {
+    width: min(v.dialog-width('add-members'), 100%);
+    padding: v.space('xl');
+  }
+
+  &--profile {
+    width: min(v.dialog-width('profile'), 100%);
+    padding: v.space('xl');
+  }
+
+  &--menu {
+    width: auto;
+    padding: v.space('sm-md');
   }
 
   @include m.respond-sm {

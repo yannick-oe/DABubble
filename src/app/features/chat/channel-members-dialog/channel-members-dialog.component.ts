@@ -45,6 +45,8 @@ export class ChannelMembersDialogComponent {
 
   readonly addRequested = output<void>();
 
+  readonly memberSelected = output<string>();
+
   private readonly userService = inject(UserService);
 
   private readonly authService = inject(AuthService);
