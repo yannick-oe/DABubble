@@ -11,7 +11,7 @@ import { LayoutService } from '../../../services/layout.service';
 import { DEFAULT_AVATAR_PATH } from '../../../services/registration.service';
 import { UserService } from '../../../services/user.service';
 import { ProfileDialogComponent } from '../../profile/profile-dialog/profile-dialog.component';
-import { SearchBarComponent } from '../../search/search-bar/search-bar.component';
+import { MobileSearchViewComponent } from '../../search/mobile-search-view/mobile-search-view.component';
 import { ChannelCreateDialogComponent } from '../channel-create-dialog/channel-create-dialog.component';
 
 const GUEST_NAME = 'Gast';
@@ -33,10 +33,10 @@ interface SelfEntry {
   selector: 'app-workspace-menu',
   imports: [
     ChannelCreateDialogComponent,
+    MobileSearchViewComponent,
     ProfileDialogComponent,
     RouterLink,
     RouterLinkActive,
-    SearchBarComponent,
   ],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss',
@@ -59,11 +59,23 @@ export class WorkspaceMenuComponent {
 
   protected readonly profileUid = signal<string | null>(null);
 
+  protected readonly searchOpen = signal(false);
+
   protected readonly isMobile = inject(LayoutService).isMobile;
 
   protected readonly self = computed(() => this.buildSelfEntry());
 
   protected readonly others = computed(() => this.sortOthers());
+
+
+  /**
+   * Opens a profile from a search hit and closes the search view.
+   * @param uid User id picked in the search results.
+   */
+  protected onSearchUser(uid: string): void {
+    this.searchOpen.set(false);
+    this.profileUid.set(uid);
+  }
 
 
   /**

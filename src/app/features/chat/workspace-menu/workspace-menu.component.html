@@ -1,6 +1,9 @@
 <nav class="workspace" aria-label="Workspace">
   @if (isMobile()) {
-    <app-search-bar (userSelected)="profileUid.set($event)" />
+    <button class="workspace__search-trigger" type="button" (click)="searchOpen.set(true)">
+      Gehe zu...
+      <img class="workspace__search-icon" src="/icons/search.svg" alt="" aria-hidden="true" />
+    </button>
   }
 
   <header class="workspace__head">
@@ -140,6 +143,10 @@
 
 @if (dialogOpen()) {
   <app-channel-create-dialog (closed)="closeDialog()" />
+}
+
+@if (searchOpen()) {
+  <app-mobile-search-view (closed)="searchOpen.set(false)" (userSelected)="onSearchUser($event)" />
 }
 
 @if (profileUid(); as uid) {

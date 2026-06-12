@@ -19,7 +19,7 @@ const ANCHOR_GAP_PX = 8;
 const ANCHOR_MIN_VIEWPORT_PX = 768;
 
 /** Width preset of the dialog card, mapped to the Figma measurements. */
-export type DialogSize = 'default' | 'members' | 'add-members' | 'profile' | 'menu';
+export type DialogSize = 'default' | 'members' | 'add-members' | 'profile' | 'menu' | 'search';
 
 /** Viewport position a dialog card is anchored to (Figma prototype). */
 export interface DialogAnchor {

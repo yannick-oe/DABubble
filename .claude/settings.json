@@ -54,7 +54,9 @@
       "Bash(node .claude-tmp/verify-join.mjs)",
       "Bash(node .claude-tmp/seed.mjs)",
       "Bash(node .claude-tmp/verify-m10b.mjs)",
-      "Bash(node .claude-tmp/reset-channel.mjs)"
+      "Bash(node .claude-tmp/reset-channel.mjs)",
+      "Bash(git check-ignore *)",
+      "Bash(node .claude-tmp/verify-search-view.mjs)"
     ]
   }
 }

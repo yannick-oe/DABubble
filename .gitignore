@@ -46,3 +46,4 @@ Thumbs.db
 # Claude/AI-related
 CLAUDE.md
 design-system.md
+.claude-tmp/

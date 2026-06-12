@@ -8,6 +8,7 @@ import {
   computed,
   effect,
   inject,
+  input,
   output,
   signal,
   viewChild,
@@ -50,10 +51,15 @@ type SearchHit = ChannelHit | UserHit | MessageHit;
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '(document:click)': 'onDocumentClick($event)',
+    '[class.search-bar--fullscreen]': 'fullscreen()',
   },
 })
 export class SearchBarComponent {
+  readonly fullscreen = input(false);
+
   readonly userSelected = output<string>();
+
+  readonly picked = output<void>();
 
   private readonly searchService = inject(SearchService);
 
@@ -127,6 +133,16 @@ export class SearchBarComponent {
     if (hit.kind === 'channel') void this.router.navigate(['/app/channel', hit.id]);
     if (hit.kind === 'user') this.userSelected.emit(hit.uid);
     if (hit.kind === 'message') void this.openMessage(hit);
+    this.picked.emit();
+  }
+
+
+  /**
+   * Moves keyboard focus into the search input (used by the mobile
+   * full-screen search view on open).
+   */
+  focusInput(): void {
+    this.searchInput().nativeElement.focus();
   }
 
 

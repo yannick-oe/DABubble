@@ -116,3 +116,22 @@ $dropdown-max-height: 480px;
   font-size: v.font-size('body');
   color: v.color('text-gray');
 }
+
+:host(.search-bar--fullscreen) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+
+  .search-bar__dropdown {
+    position: static;
+    flex: 1;
+    min-height: 0;
+    margin-top: v.space('md');
+  }
+
+  .search-bar__list {
+    max-height: 100%;
+    padding: 0;
+    box-shadow: none;
+  }
+}

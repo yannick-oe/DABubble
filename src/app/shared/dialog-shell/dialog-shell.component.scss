@@ -106,6 +106,17 @@
     position: static;
     padding: v.space('md') v.space('md') v.space('lg');
   }
+
+  .dialog-shell__card--search {
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    animation: none;
+
+    &::before {
+      display: none;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
