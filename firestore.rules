@@ -155,7 +155,13 @@ service cloud.firestore {
     }
 
     match /directMessages/{conversationId} {
-      allow read, delete: if isParticipant(conversationId);
+      // Reads accept either proof of participation: the id (single-doc
+      // gets, incl. the lazy existence check on a missing doc) or the
+      // stored participantIds (provable for the global-search list
+      // query `where participantIds array-contains uid`).
+      allow read: if isParticipant(conversationId)
+        || (signedIn() && request.auth.uid in resource.data.participantIds);
+      allow delete: if isParticipant(conversationId);
       allow create: if isParticipant(conversationId)
         && request.resource.data.participantIds == conversationId.split('_');
       allow update: if false;
