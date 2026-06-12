@@ -20,8 +20,27 @@ import { ToastService } from './toast.service';
 const MESSAGES_LOAD_ERROR = 'Nachrichten konnten nicht geladen werden.';
 
 /**
- * Streams the messages of a channel ordered by creation time and persists
- * new messages with the denormalized thread fields initialized.
+ * Builds the messages subcollection path of a channel.
+ * @param channelId Firestore id of the channel.
+ */
+export function channelMessagesPath(channelId: string): string {
+  return `channels/${channelId}/messages`;
+}
+
+
+/**
+ * Builds the messages subcollection path of a direct conversation.
+ * @param conversationId Deterministic id of the conversation.
+ */
+export function directMessagesPath(conversationId: string): string {
+  return `directMessages/${conversationId}/messages`;
+}
+
+
+/**
+ * Streams the messages of an arbitrary messages collection (channel chat,
+ * direct conversation, later thread replies) ordered by creation time and
+ * persists new messages with the denormalized thread fields initialized.
  */
 @Injectable({ providedIn: 'root' })
 export class MessageService {
@@ -35,22 +54,22 @@ export class MessageService {
 
 
   /**
-   * Streams a channel's messages live, oldest first. Safe to call from
+   * Streams a messages collection live, oldest first. Safe to call from
    * reactive callbacks — the query is created in the injection context.
-   * @param channelId Firestore id of the channel.
+   * @param collectionPath Firestore path of the messages collection.
    */
-  streamMessages(channelId: string): Observable<Message[]> {
-    return runInInjectionContext(this.injector, () => this.queryMessages(channelId));
+  streamMessages(collectionPath: string): Observable<Message[]> {
+    return runInInjectionContext(this.injector, () => this.queryMessages(collectionPath));
   }
 
 
   /**
    * Persists a message authored by the signed-in user with empty reactions
    * and thread counters, matching the data-model defaults.
-   * @param channelId Firestore id of the target channel.
+   * @param collectionPath Firestore path of the target messages collection.
    * @param text Trimmed message text.
    */
-  async sendMessage(channelId: string, text: string): Promise<void> {
+  async sendMessage(collectionPath: string, text: string): Promise<void> {
     const message: MessageDoc = {
       authorId: this.authService.requireUid(),
       text,
@@ -60,7 +79,7 @@ export class MessageService {
       lastReplyAt: null,
     };
     await runInInjectionContext(this.injector, () =>
-      addDoc(collection(this.firestore, `channels/${channelId}/messages`), message),
+      addDoc(collection(this.firestore, collectionPath), message),
     );
   }
 
@@ -68,11 +87,11 @@ export class MessageService {
   /**
    * Builds the live query; on Firestore errors a toast is shown and an
    * empty list keeps the UI functional.
-   * @param channelId Firestore id of the channel.
+   * @param collectionPath Firestore path of the messages collection.
    */
-  private queryMessages(channelId: string): Observable<Message[]> {
+  private queryMessages(collectionPath: string): Observable<Message[]> {
     const messagesQuery = query(
-      collection(this.firestore, `channels/${channelId}/messages`),
+      collection(this.firestore, collectionPath),
       orderBy('createdAt'),
     );
     return (collectionData(messagesQuery, { idField: 'id' }) as Observable<Message[]>).pipe(

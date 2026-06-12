@@ -1,0 +1,31 @@
+<div class="message-list" #scrollContainer (scroll)="onScroll()">
+  @for (group of groups(); track group.key) {
+    <div class="message-list__separator" role="separator">
+      <span class="message-list__separator-label">{{ group.label }}</span>
+    </div>
+    <ul class="message-list__day">
+      @for (message of group.messages; track message.id) {
+        <li class="message" [class.message--own]="isOwn(message)">
+          <img class="message__avatar" [src]="authorAvatar(message)" alt="" aria-hidden="true" />
+          <div class="message__body">
+            <div class="message__meta">
+              <span class="message__author">{{ authorName(message) }}</span>
+              <span class="message__time">{{ messageTime(message) }} Uhr</span>
+            </div>
+            <p class="message__bubble">{{ message.text }}</p>
+            @if (message.replyCount > 0) {
+              <div class="message__thread">
+                <button class="message__thread-link" type="button">
+                  {{ replyLabel(message) }}
+                </button>
+                <span class="message__thread-meta">
+                  Letzte Antwort {{ lastReplyTime(message) }}
+                </span>
+              </div>
+            }
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</div>

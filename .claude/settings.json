@@ -31,7 +31,11 @@
       "Bash(node .claude-tmp/trace-warning.mjs)",
       "Bash(node .claude-tmp/clean-channels.mjs)",
       "Bash(node .claude-tmp/debug-header.mjs)",
-      "Bash(node .claude-tmp/cleanup-m3.mjs)"
+      "Bash(node .claude-tmp/cleanup-m3.mjs)",
+      "Bash(node .claude-tmp/clean-dms.mjs)",
+      "Bash(node .claude-tmp/verify-m4.mjs)",
+      "Bash(node .claude-tmp/debug-dialog-reload.mjs)",
+      "Bash(node .claude-tmp/cleanup-m4.mjs)"
     ]
   }
 }
