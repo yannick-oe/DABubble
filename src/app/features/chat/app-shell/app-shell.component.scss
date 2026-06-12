@@ -9,6 +9,7 @@
 .shell {
   display: flex;
   flex-direction: column;
+  height: 100vh;
   height: 100dvh;
   overflow: hidden;
   background-color: v.color('bg');
@@ -108,5 +109,51 @@
   .shell__workspace,
   .shell__thread {
     transition: none;
+  }
+}
+
+@include m.respond-md {
+  .shell__panels {
+    padding: 0;
+    gap: 0;
+  }
+
+  .shell__menu-toggle {
+    display: none;
+  }
+
+  .shell__workspace,
+  .shell__workspace--closed {
+    width: 100%;
+    margin-left: 0;
+    border-radius: 0;
+    opacity: 1;
+    transition: none;
+  }
+
+  .shell__chat {
+    border-radius: 0;
+  }
+
+  .shell__thread {
+    display: none;
+    border-radius: 0;
+    transition: none;
+  }
+
+  :host(.shell-host--view-menu) .shell__chat {
+    display: none;
+  }
+
+  :host(.shell-host--view-chat) .shell__workspace,
+  :host(.shell-host--view-thread) .shell__workspace,
+  :host(.shell-host--view-thread) .shell__chat {
+    display: none;
+  }
+
+  :host(.shell-host--view-thread) .shell__thread {
+    display: block;
+    width: 100%;
+    opacity: 1;
   }
 }

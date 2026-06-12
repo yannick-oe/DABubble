@@ -34,6 +34,8 @@ $dropdown-max-height: 320px;
   color: v.color('black');
   text-align: left;
   white-space: nowrap;
+  min-width: 0;
+  @include m.text-ellipsis;
   transition: background-color v.$transition-fast, color v.$transition-fast;
 
   &:hover,

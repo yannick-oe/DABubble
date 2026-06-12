@@ -83,3 +83,12 @@
 .thread__composer {
   padding: 0 v.space('lg') v.space('lg');
 }
+@include m.respond-md {
+  .thread__scroll {
+    padding: v.space('md');
+  }
+
+  .thread__composer {
+    padding: 0 v.space('md') v.space('md');
+  }
+}

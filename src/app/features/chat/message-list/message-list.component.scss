@@ -44,3 +44,9 @@
   flex-direction: column;
   gap: v.space('lg');
 }
+
+@include m.respond-md {
+  .message-list {
+    padding: v.space('md');
+  }
+}

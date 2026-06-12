@@ -5,11 +5,13 @@ import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/cor
 import { Router } from '@angular/router';
 
 import { ChannelService } from '../../../services/channel.service';
+import { LayoutService } from '../../../services/layout.service';
 
 /**
- * Rendered at /app while no channel is selected. As soon as the channel
- * stream has loaded, it redirects to the alphabetically first channel;
- * users without channels stay on the empty chat card.
+ * Rendered at /app while no channel is selected. On desktop it redirects
+ * to the alphabetically first channel once the stream has loaded; users
+ * without channels stay on the empty chat card. On mobile /app stays the
+ * full-screen menu view, so no redirect happens there.
  */
 @Component({
   selector: 'app-channel-redirect',
@@ -18,6 +20,8 @@ import { ChannelService } from '../../../services/channel.service';
 })
 export class ChannelRedirectComponent {
   private readonly channelService = inject(ChannelService);
+
+  private readonly layoutService = inject(LayoutService);
 
   private readonly router = inject(Router);
 
@@ -34,6 +38,7 @@ export class ChannelRedirectComponent {
    * Navigates to the alphabetically first channel once channels are loaded.
    */
   private redirectToFirstChannel(): void {
+    if (this.layoutService.isMobile()) return;
     if (!this.channelService.channelsLoaded()) return;
     const first = [...this.channelService.channels()].sort((a, b) =>
       a.name.localeCompare(b.name, 'de'),

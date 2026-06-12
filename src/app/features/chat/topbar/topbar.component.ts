@@ -3,9 +3,13 @@
  * and the profile menu.
  */
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, map } from 'rxjs';
 
 import { AuthService } from '../../../services/auth.service';
+import { LayoutService } from '../../../services/layout.service';
+import { ThreadService } from '../../../services/thread.service';
 import { DEFAULT_AVATAR_PATH } from '../../../services/registration.service';
 import { UserService } from '../../../services/user.service';
 import { ProfileDialogComponent } from '../../profile/profile-dialog/profile-dialog.component';
@@ -40,6 +44,24 @@ export class TopbarComponent {
   private readonly userService = inject(UserService);
 
   private readonly router = inject(Router);
+
+  private readonly layoutService = inject(LayoutService);
+
+  private readonly threadService = inject(ThreadService);
+
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(() => this.router.url),
+    ),
+    { initialValue: this.router.url },
+  );
+
+  protected readonly isMobile = this.layoutService.isMobile;
+
+  protected readonly showBack = computed(
+    () => this.isMobile() && (this.threadService.isOpen() || this.currentUrl().startsWith('/app/')),
+  );
 
   protected readonly state = signal<TopbarState>('closed');
 
@@ -82,6 +104,16 @@ export class TopbarComponent {
    */
   protected close(): void {
     this.state.set('closed');
+  }
+
+
+  /**
+   * Mobile back navigation: an open thread returns to the chat view,
+   * otherwise the chat view returns to the menu view.
+   */
+  protected back(): void {
+    if (this.threadService.isOpen()) return this.threadService.close();
+    void this.router.navigate(['/app']);
   }
 
 

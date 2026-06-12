@@ -19,6 +19,7 @@ import { Timestamp } from '@angular/fire/firestore';
 
 import { Message } from '../../../models/message.model';
 import { AuthService } from '../../../services/auth.service';
+import { LayoutService } from '../../../services/layout.service';
 import { MessageFocusService } from '../../../services/message-focus.service';
 import { MessageItemComponent } from '../message-item/message-item.component';
 
@@ -27,6 +28,8 @@ const DATE_KEY_FORMAT = 'yyyy-MM-dd';
 const DAY_LABEL_FORMAT = 'EEEE, d. MMMM';
 const NEAR_BOTTOM_THRESHOLD_PX = 120;
 const FOCUS_HIGHLIGHT_DURATION_MS = 2000;
+const DESKTOP_REACTION_LIMIT = 20;
+const MOBILE_REACTION_LIMIT = 7;
 
 /** Consecutive messages of one calendar day under a shared separator. */
 interface MessageGroup {
@@ -65,6 +68,12 @@ export class MessageListComponent {
   private readonly authService = inject(AuthService);
 
   private readonly messageFocusService = inject(MessageFocusService);
+
+  private readonly layoutService = inject(LayoutService);
+
+  protected readonly reactionLimit = computed(() =>
+    this.layoutService.isMobile() ? MOBILE_REACTION_LIMIT : DESKTOP_REACTION_LIMIT,
+  );
 
   private readonly scrollContainer = viewChild<ElementRef<HTMLElement>>('scrollContainer');
 

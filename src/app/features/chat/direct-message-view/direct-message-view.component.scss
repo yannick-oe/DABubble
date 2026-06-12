@@ -121,3 +121,16 @@
 .dm__composer {
   padding: 0 v.space('xl-xxl') v.space('lg');
 }
+@include m.respond-md {
+  .dm__head {
+    padding: v.space('sm-md') v.space('md');
+  }
+
+  .dm__empty {
+    padding: v.space('md');
+  }
+
+  .dm__composer {
+    padding: 0 v.space('md') v.space('md');
+  }
+}

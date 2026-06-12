@@ -230,3 +230,18 @@
     transition: none;
   }
 }
+
+@include m.respond-md {
+  :host {
+    gap: v.space('md');
+  }
+
+  .message__avatar {
+    width: v.$avatar-md;
+    height: v.$avatar-md;
+  }
+
+  .message__bubble {
+    padding: v.space('sm-md') v.space('md');
+  }
+}

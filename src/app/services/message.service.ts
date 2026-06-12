@@ -278,10 +278,12 @@ export class MessageService {
 
   /**
    * Plays the chat notification sound, restarting it if already playing.
+   * Rejections are swallowed because browsers block autoplay until the
+   * first user gesture.
    */
   private playNotificationSound(): void {
     this.notificationSound.currentTime = 0;
-    this.notificationSound.play().catch(() => { /* autoplay blocked */ });
+    this.notificationSound.play().catch(() => undefined);
   }
 
 

@@ -119,3 +119,12 @@
 .channel__composer {
   padding: 0 v.space('xl-xxl') v.space('lg');
 }
+@include m.respond-md {
+  .channel__head {
+    padding: v.space('sm-md') v.space('md');
+  }
+
+  .channel__composer {
+    padding: 0 v.space('md') v.space('md');
+  }
+}

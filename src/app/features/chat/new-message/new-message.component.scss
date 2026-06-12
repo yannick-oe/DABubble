@@ -104,3 +104,12 @@
 .new-message__composer {
   padding: 0 v.space('xl-xxl') v.space('lg');
 }
+@include m.respond-md {
+  .new-message__head {
+    padding: v.space('md');
+  }
+
+  .new-message__composer {
+    padding: 0 v.space('md') v.space('md');
+  }
+}
