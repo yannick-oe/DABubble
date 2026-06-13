@@ -17,7 +17,6 @@
 .message-list__separator {
   display: flex;
   align-items: center;
-  gap: v.space('md');
   margin: v.space('lg') 0;
 
   &::before,

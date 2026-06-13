@@ -160,6 +160,9 @@ export class ChannelViewComponent {
    * @param event Click event of the header trigger.
    */
   protected openDialog(kind: ChannelDialog, event: Event): void {
+    if (kind === 'add' && window.innerWidth <= 768) {
+      kind = 'members';
+    }
     this.dialogAnchor.set(this.anchorFor(kind, event));
     this.dialog.set(kind);
   }

@@ -125,6 +125,11 @@
     padding: v.space('sm-md') v.space('md');
   }
 
+  .channel__title-icon {
+    width: 18px;
+    height: 18px;
+  }
+
   .channel__members-list {
     display: none;
   }
