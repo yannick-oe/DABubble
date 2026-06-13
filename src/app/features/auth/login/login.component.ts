@@ -52,6 +52,9 @@ export class LoginComponent {
     password: ['', Validators.required],
   });
 
+  protected emailFocused = false;
+  protected passwordFocused = false;
+
 
   /**
    * Resolves the visible error message for a control.

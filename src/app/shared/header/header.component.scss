@@ -18,6 +18,12 @@
   display: flex;
   align-items: center;
   gap: v.space('md');
+  border: none;
+  padding: 0;
+
+  &:hover {
+    border: none;
+  }
 }
 
 .header__logo {

@@ -9,7 +9,7 @@
     <div class="form-field">
       <label class="sr-only" for="login-email">E-Mail-Adresse</label>
       <div class="form-input-wrapper form-input-wrapper--leading">
-        <img class="form-input-icon" src="/icons/mail-grey.svg" alt="" aria-hidden="true" />
+        <img class="form-input-icon" [src]="emailFocused ? '/icons/mail.svg' : '/icons/mail-grey.svg'" alt="" aria-hidden="true" />
         <input
           id="login-email"
           class="form-input"
@@ -19,6 +19,8 @@
           placeholder="beispielname&#64;email.com"
           aria-describedby="login-email-error"
           [attr.aria-invalid]="isInvalid('email')"
+          (focus)="emailFocused = true"
+          (blur)="emailFocused = false"
         />
       </div>
       <p class="form-error" id="login-email-error">{{ errorMessage('email') }}</p>
@@ -31,9 +33,11 @@
         formControlName="password"
         placeholder="Passwort"
         autocomplete="current-password"
-        leadingIcon="/icons/lock-grey.svg"
+        [leadingIcon]="passwordFocused ? '/icons/lock.svg' : '/icons/lock-grey.svg'"
         describedBy="login-password-error"
         [invalid]="isInvalid('password')"
+        (focus)="passwordFocused = true"
+        (blur)="passwordFocused = false"
       />
       <p class="form-error" id="login-password-error">{{ errorMessage('password') }}</p>
     </div>

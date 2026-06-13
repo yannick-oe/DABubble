@@ -14,7 +14,7 @@
     <div class="form-field">
       <label class="sr-only" for="register-name">Name und Nachname</label>
       <div class="form-input-wrapper form-input-wrapper--leading">
-        <img class="form-input-icon" src="/icons/account-circle.svg" alt="" aria-hidden="true" />
+        <img class="form-input-icon icon-person" [src]="nameFocused ? '/icons/person.svg' : '/icons/person-grey.svg'" alt="" aria-hidden="true" />
         <input
           id="register-name"
           class="form-input"
@@ -24,6 +24,8 @@
           placeholder="Name und Nachname"
           aria-describedby="register-name-error"
           [attr.aria-invalid]="isInvalid('name')"
+          (focus)="nameFocused = true"
+          (blur)="nameFocused = false"
         />
       </div>
       <p class="form-error" id="register-name-error">{{ errorMessage('name') }}</p>
@@ -32,7 +34,7 @@
     <div class="form-field">
       <label class="sr-only" for="register-email">E-Mail-Adresse</label>
       <div class="form-input-wrapper form-input-wrapper--leading">
-        <img class="form-input-icon" src="/icons/mail-grey.svg" alt="" aria-hidden="true" />
+        <img class="form-input-icon" [src]="emailFocused ? '/icons/mail.svg' : '/icons/mail-grey.svg'" alt="" aria-hidden="true" />
         <input
           id="register-email"
           class="form-input"
@@ -42,6 +44,8 @@
           placeholder="beispielname&#64;email.com"
           aria-describedby="register-email-error"
           [attr.aria-invalid]="isInvalid('email')"
+          (focus)="emailFocused = true"
+          (blur)="emailFocused = false"
         />
       </div>
       <p class="form-error" id="register-email-error">{{ errorMessage('email') }}</p>
@@ -54,9 +58,11 @@
         formControlName="password"
         placeholder="Passwort"
         autocomplete="new-password"
-        leadingIcon="/icons/lock-grey.svg"
+        [leadingIcon]="passwordFocused ? '/icons/lock.svg' : '/icons/lock-grey.svg'"
         describedBy="register-password-error"
         [invalid]="isInvalid('password')"
+        (focus)="passwordFocused = true"
+        (blur)="passwordFocused = false"
       />
       <p class="form-error" id="register-password-error">{{ errorMessage('password') }}</p>
     </div>

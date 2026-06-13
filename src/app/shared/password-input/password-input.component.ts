@@ -2,7 +2,7 @@
  * @file Password input pill with a visibility toggle, usable in reactive
  * forms via ControlValueAccessor or standalone in presentational forms.
  */
-import { ChangeDetectionStrategy, Component, forwardRef, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, input, signal, output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 const SHOW_LABEL = 'Passwort anzeigen';
@@ -87,6 +87,10 @@ export class PasswordInputComponent implements ControlValueAccessor {
   }
 
 
+  readonly focus = output<void>();
+
+  readonly blur = output<void>();
+
   /**
    * Forwards user input to the forms API.
    * @param event Input event of the native field.
@@ -99,10 +103,19 @@ export class PasswordInputComponent implements ControlValueAccessor {
 
 
   /**
-   * Marks the control as touched when the field loses focus.
+   * Emits the focus event.
+   */
+  protected handleFocus(): void {
+    this.focus.emit();
+  }
+
+
+  /**
+   * Marks the control as touched when the field loses focus and emits blur.
    */
   protected handleBlur(): void {
     this.onTouched();
+    this.blur.emit();
   }
 
 

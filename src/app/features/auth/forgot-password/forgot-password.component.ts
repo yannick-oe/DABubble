@@ -56,6 +56,8 @@ export class ForgotPasswordComponent implements AfterViewInit {
     email: ['', [Validators.required, Validators.email]],
   });
 
+  protected emailFocused = false;
+
 
   /**
    * Moves focus to the page heading after navigation.

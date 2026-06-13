@@ -80,6 +80,10 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     privacy: [false, Validators.requiredTrue],
   });
 
+  protected nameFocused = false;
+  protected emailFocused = false;
+  protected passwordFocused = false;
+
 
   /**
    * Restores persisted step values and applies a transported signup error.
