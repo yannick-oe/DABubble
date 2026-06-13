@@ -10,6 +10,7 @@
   padding: v.space-fluid('sm-md', 'xl-xxl') v.$header-inset;
 
   @include m.respond-md {
+    justify-content: center;
     padding: v.space-fluid('sm-md', 'xl-xxl') v.space('md');
   }
 }
@@ -36,6 +37,10 @@
   flex-direction: column;
   align-items: flex-end;
   gap: v.space('xs');
+
+  @include m.respond-md {
+    display: none;
+  }
 }
 
 .header__cta-text {

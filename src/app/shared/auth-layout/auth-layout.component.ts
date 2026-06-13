@@ -3,7 +3,7 @@
  */
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, map } from 'rxjs';
 
 import { FooterComponent } from '../footer/footer.component';
@@ -17,7 +17,7 @@ const LOGIN_URL_FRAGMENT = '/auth/login';
  */
 @Component({
   selector: 'app-auth-layout',
-  imports: [RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, RouterLink, HeaderComponent, FooterComponent],
   templateUrl: './auth-layout.component.html',
   styleUrl: './auth-layout.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
