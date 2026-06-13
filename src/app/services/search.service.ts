@@ -78,7 +78,25 @@ export class SearchService {
    * @param term Raw search term (min length enforced by the caller).
    */
   async search(term: string): Promise<SearchResults> {
-    const normalized = term.trim().toLowerCase();
+    const raw = term.trim();
+    const normalized = raw.toLowerCase();
+
+    if (raw.startsWith('#')) {
+      return {
+        channels: this.searchChannels(normalized.slice(1).trim()),
+        users: [],
+        messages: [],
+      };
+    }
+
+    if (raw.startsWith('@')) {
+      return {
+        channels: [],
+        users: this.searchUsers(normalized.slice(1).trim()),
+        messages: [],
+      };
+    }
+
     return {
       channels: this.searchChannels(normalized),
       users: this.searchUsers(normalized),

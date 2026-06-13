@@ -13,6 +13,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Location } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -90,6 +91,23 @@ export class NewMessageComponent implements AfterViewInit {
   protected readonly activeIndex = signal(0);
 
   protected readonly suggestions = computed(() => this.buildSuggestions());
+
+
+  /**
+   * Reads pre-selected recipient from router state, if navigated from
+   * global search bar.
+   */
+  constructor() {
+    const state = inject(Location).getState() as Record<string, any>;
+    if (state['recipientHit']) {
+      const hit = state['recipientHit'];
+      if (hit.kind === 'channel') {
+        this.recipient.set({ kind: 'channel', id: hit.id, label: hit.name });
+      } else if (hit.kind === 'user') {
+        this.recipient.set({ kind: 'user', id: hit.uid, label: hit.name, avatar: avatarUrl(hit.avatarPath) });
+      }
+    }
+  }
 
 
   /**

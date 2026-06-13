@@ -124,12 +124,19 @@ export class SearchBarComponent {
   }
 
 
-  /**
-   * Resolves a clicked or keyboard-picked result.
-   * @param hit Search hit to open.
-   */
   protected pick(hit: SearchHit): void {
     this.results.set(null);
+    const rawTerm = this.term().trim();
+    const isSpecialPrefix = rawTerm.startsWith('#') || rawTerm.startsWith('@');
+    
+    this.searchControl.setValue('');
+
+    if (isSpecialPrefix && (hit.kind === 'channel' || hit.kind === 'user')) {
+      void this.router.navigate(['/app/new-message'], { state: { recipientHit: hit } });
+      this.picked.emit();
+      return;
+    }
+
     if (hit.kind === 'channel') void this.router.navigate(['/app/channel', hit.id]);
     if (hit.kind === 'user') this.userSelected.emit(hit.uid);
     if (hit.kind === 'message') void this.openMessage(hit);
@@ -207,7 +214,9 @@ export class SearchBarComponent {
    * @param term Current debounced term.
    */
   private async runSearch(term: string): Promise<void> {
-    if (term.trim().length < MIN_TERM_LENGTH) return this.results.set(null);
+    const raw = term.trim();
+    const isSpecial = raw.startsWith('#') || raw.startsWith('@');
+    if (raw.length < (isSpecial ? 1 : MIN_TERM_LENGTH)) return this.results.set(null);
     const requestId = (this.searchRequestId += 1);
     const results = await this.searchService.search(term);
     if (requestId !== this.searchRequestId) return;
