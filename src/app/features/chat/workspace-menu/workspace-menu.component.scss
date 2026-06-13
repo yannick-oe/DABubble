@@ -15,6 +15,10 @@
   display: flex;
   align-items: center;
   gap: v.space('md');
+
+  > .btn-icon:hover img {
+    content: url('/icons/edit-square-hover.svg');
+  }
 }
 
 .workspace__head-logo {
@@ -40,6 +44,10 @@
   display: flex;
   align-items: center;
   gap: v.space('sm');
+
+  > .btn-icon:hover img {
+    content: url('/icons/add-hover.svg');
+  }
 }
 
 .workspace__section-toggle {
