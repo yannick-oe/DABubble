@@ -125,6 +125,20 @@
     padding: v.space('sm-md') v.space('md');
   }
 
+  .channel__members-list {
+    display: none;
+  }
+
+  .channel__add-member {
+    width: 32px;
+    height: 32px;
+
+    img {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
   .channel__composer {
     padding: 0 v.space('md') v.space('md');
   }
