@@ -18,6 +18,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
+import { AuthService } from '../../../services/auth.service';
 import { LayoutService } from '../../../services/layout.service';
 import { MessageFocusService } from '../../../services/message-focus.service';
 import { DEFAULT_AVATAR_PATH } from '../../../services/registration.service';
@@ -70,6 +71,10 @@ export class SearchBarComponent {
   private readonly host = inject(ElementRef<HTMLElement>);
 
   private readonly layoutService = inject(LayoutService);
+
+  private readonly authService = inject(AuthService);
+
+  protected readonly currentUid = computed(() => this.authService.currentUser()?.uid);
 
   protected readonly placeholder = computed(() =>
     this.layoutService.isMobile() ? MOBILE_PLACEHOLDER : DESKTOP_PLACEHOLDER,

@@ -1,6 +1,7 @@
 <div
   class="dialog-shell"
   [class.dialog-shell--anchored]="anchor() !== null"
+  [class.dialog-shell--search]="size() === 'search'"
   (click)="onOverlayClick($event)"
 >
   <section

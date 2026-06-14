@@ -2,7 +2,7 @@
  * @file Full-screen mobile search view per the Figma mobile "Search"
  * frame, wrapping the shared search bar in a dialog shell.
  */
-import { AfterViewInit, ChangeDetectionStrategy, Component, output, viewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, output, viewChild } from '@angular/core';
 
 import { DialogShellComponent } from '../../../shared/dialog-shell/dialog-shell.component';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
@@ -19,6 +19,9 @@ import { SearchBarComponent } from '../search-bar/search-bar.component';
   templateUrl: './mobile-search-view.component.html',
   styleUrl: './mobile-search-view.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(document:click)': 'onDocumentClick($event)',
+  },
 })
 export class MobileSearchViewComponent implements AfterViewInit {
   readonly closed = output<void>();
@@ -27,6 +30,8 @@ export class MobileSearchViewComponent implements AfterViewInit {
 
   private readonly searchBar = viewChild.required(SearchBarComponent);
 
+  private readonly host = inject(ElementRef<HTMLElement>);
+
 
   /**
    * Focuses the search input on open (the user tapped the search field
@@ -34,5 +39,17 @@ export class MobileSearchViewComponent implements AfterViewInit {
    */
   ngAfterViewInit(): void {
     this.searchBar().focusInput();
+  }
+
+
+  /**
+   * Closes the search view when a click lands outside of it (e.g. on the topbar).
+   * @param event Document-level click event.
+   */
+  protected onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (this.host.nativeElement.contains(target)) return;
+    if (target.closest('.workspace__search-trigger')) return;
+    this.closed.emit();
   }
 }

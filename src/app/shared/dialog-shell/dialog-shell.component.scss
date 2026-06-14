@@ -110,8 +110,12 @@
     padding: v.space('md') v.space('md') v.space('lg');
   }
 
+  .dialog-shell--search {
+    top: 72px;
+  }
+
   .dialog-shell__card--search {
-    height: 100dvh;
+    height: calc(100dvh - 72px);
     max-height: none;
     border-radius: 0;
     animation: none;
