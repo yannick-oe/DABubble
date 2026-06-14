@@ -186,6 +186,23 @@
   gap: v.space('md');
 }
 
+.message__edit-btn-icon {
+  display: none;
+  width: v.$icon-sm;
+}
+
+.message__edit-btn--save .message__edit-btn-icon { filter: brightness(0) invert(1); }
+
+@include m.respond-compact {
+  .message__edit-btn {
+    width: v.$btn-height-sm;
+    padding: 0;
+  }
+
+  .message__edit-btn-label { display: none; }
+  .message__edit-btn-icon { display: block; }
+}
+
 .message__chips {
   max-width: 100%;
 }

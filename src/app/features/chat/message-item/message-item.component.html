@@ -39,16 +39,29 @@
           }
         </span>
         <div class="message__edit-actions">
-          <button class="btn btn-secondary btn-sm" type="button" (click)="cancelEdit()">
-            Abbrechen
+          <button
+            class="btn btn-secondary btn-sm message__edit-btn message__edit-btn--cancel"
+            type="button"
+            aria-label="Abbrechen"
+            (click)="cancelEdit()"
+          >
+            <img class="message__edit-btn-icon" src="/icons/close.svg" alt="" aria-hidden="true" />
+            <span class="message__edit-btn-label">Abbrechen</span>
           </button>
           <button
-            class="btn btn-primary btn-sm"
+            class="btn btn-primary btn-sm message__edit-btn message__edit-btn--save"
             type="button"
+            aria-label="Speichern"
             [disabled]="!canSaveEdit()"
             (click)="saveEdit()"
           >
-            Speichern
+            <img
+              class="message__edit-btn-icon"
+              src="/icons/check-circle.svg"
+              alt=""
+              aria-hidden="true"
+            />
+            <span class="message__edit-btn-label">Speichern</span>
           </button>
         </div>
       </div>

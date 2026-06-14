@@ -6,6 +6,10 @@
   @media (max-width: #{v.$breakpoint-xs}) { @content; }
 }
 
+@mixin respond-compact {
+  @media (max-width: #{v.$breakpoint-compact}) { @content; }
+}
+
 @mixin respond-sm {
   @media (max-width: #{v.$breakpoint-sm}) { @content; }
 }
